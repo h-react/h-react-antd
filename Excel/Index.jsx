@@ -1,7 +1,7 @@
 import React from 'react';
 import {message, Modal, Alert, Progress, Button, Upload} from 'antd';
-import {Api} from 'api';
-import {I18n} from "basic";
+import {Api} from 'Api';
+import {I18n} from "Basic";
 import KExcel from './KExcel';
 
 const styles = {

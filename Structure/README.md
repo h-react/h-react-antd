@@ -1,2 +1,0 @@
-# structure
-layout、router

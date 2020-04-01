@@ -1,5 +1,5 @@
 import {message} from 'antd';
-import {Parse, I18n} from 'basic';
+import {Parse, I18n} from 'Basic';
 import Auth from './../Auth';
 import Crypto from './Crypto';
 

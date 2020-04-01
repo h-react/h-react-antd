@@ -1,6 +1,6 @@
 import {message} from 'antd';
 import axios from 'axios';
-import {Path, Parse, I18n} from 'basic';
+import {Path, Parse, I18n} from 'Basic';
 import Auth from './../Auth';
 import Crypto from './Crypto';
 
