@@ -1,7 +1,6 @@
 import {message} from 'antd';
 import axios from 'axios';
-import {Path, Parse, I18n} from 'Basic';
-import Auth from './../Auth';
+import {Auth, Path, Parse, I18n} from 'hReact';
 import Crypto from './Crypto';
 
 const ApiSave = (key, res) => {

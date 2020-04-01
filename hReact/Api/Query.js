@@ -1,4 +1,4 @@
-import Auth from './../Auth';
+import {Auth} from 'hReact';
 import Http from './Http';
 import Ws from './Ws';
 

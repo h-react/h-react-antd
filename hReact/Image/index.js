@@ -4,8 +4,8 @@ const Index = {
    * 图片处理
    */
   pic: {
-    404: require('./../assets/img/404.jpg'),
-    logo: require('./../assets/img/logo.jpg'),
+    404: require('../../assets/img/404.jpg'),
+    logo: require('../../assets/img/logo.jpg'),
   },
 
   /**

@@ -61,7 +61,7 @@ const Crypto = {
         }
         const secret = CryptoJS.enc.Utf8.parse(crypt.secret);
         const iv = CryptoJS.enc.Utf8.parse(crypt.iv);
-        text = CryptoJS.DES.decrypt({ ciphertext: CryptoJS.enc.Base64.parse(text) }, secret, {
+        text = CryptoJS.DES.decrypt({ciphertext: CryptoJS.enc.Base64.parse(text)}, secret, {
           iv: iv,
           mode: CryptoJS.mode.CBC,
           padding: CryptoJS.pad.Pkcs7,

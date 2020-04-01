@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Modal} from 'antd';
 
 import './Picture.scss';
-import Parse from "./../../Parse";
+import Parse from "../../Parse";
 
 class Picture extends Component {
   static propTypes = {};

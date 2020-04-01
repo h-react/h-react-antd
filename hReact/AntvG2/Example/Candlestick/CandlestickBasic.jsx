@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DataSet } from '@antv/data-set';
 import AntvG2 from '../../AntvG2';
 
-import SampleData from './../../Data/candle-sticks';
+import SampleData from '../../Data/candle-sticks';
 
 export default class CandlestickBasic extends Component {
   static displayName = 'CandlestickBasic';

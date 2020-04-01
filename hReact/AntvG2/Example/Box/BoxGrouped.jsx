@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { DataSet } from '@antv/data-set';
 import AntvG2 from '../../AntvG2';
 
-import SampleData from './../../Data/iris';
+import SampleData from '../../Data/iris';
 
 export default class BoxGrouped extends Component {
   static displayName = 'BoxGrouped';

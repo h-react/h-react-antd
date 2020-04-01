@@ -1,6 +1,6 @@
 import React from 'react';
 import {message, Modal, Alert, Progress, Button, Upload} from 'antd';
-import {Api} from 'Api';
+import {Api} from 'hReact';
 import {I18n} from "Basic";
 import KExcel from './KExcel';
 
