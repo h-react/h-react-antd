@@ -3,16 +3,6 @@
 .toolbar {
   position: fixed;
   z-index: 999;
-
-  .head {
-    width: 70px;
-    height: 70px;
-    padding: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
 }
 
 .toolbar.leftTop {

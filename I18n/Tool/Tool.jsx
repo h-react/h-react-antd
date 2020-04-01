@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Radio, Drawer} from 'antd';
+import {Radio, Drawer, Button} from 'antd';
+import {TranslationOutlined} from '@ant-design/icons';
 import I18nConfig from '../Config';
 import Cookie from '../../Storage/Cookie';
 
@@ -40,13 +41,16 @@ class Tool extends Component {
     }
     return (
       <div className={`toolbar ${this.state.placement}`}>
-        <img
-          className="head"
-          src={require('./lang.svg').default}
+        <Button
+          type="default"
+          icon={<TranslationOutlined/>}
+          size="large"
           onClick={() => {
             this.setState({showTool: true})
           }}
-        />
+        >
+          Translation
+        </Button>
         <Drawer
           title="CHOICE LANGUAGE"
           placement={this.state.drawerPlacement}
