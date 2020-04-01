@@ -2,7 +2,7 @@ import Config from './Config';
 
 const Index = (trans, lang = null) => {
   if (lang === null) {
-    lang = Config.default;
+    lang = Config.lang;
   }
   if (typeof trans !== 'object') {
     trans = [trans];
@@ -17,8 +17,8 @@ const Index = (trans, lang = null) => {
   let rl = [];
   trans.forEach((t, idx) => {
     t = t.toUpperCase();
-    let l = (Config.langJson[lang] && Config.langJson[lang][t]) ? Config.langJson[lang][t] : null;
-    if (!l) l = (Config.langJson[Config.default] && Config.langJson[Config.default][t]) ? Config.langJson[Config.default][t] : null;
+    let l = (Config.data[lang] && Config.data[lang][t]) ? Config.data[lang][t] : null;
+    if (!l) l = (Config.data[Config.lang] && Config.data[Config.lang][t]) ? Config.data[Config.lang][t] : null;
     if (!l) {
       rl.push('[I18N]' + t);
     } else {
