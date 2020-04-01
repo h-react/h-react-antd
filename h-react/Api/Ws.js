@@ -1,5 +1,5 @@
 import {message} from 'antd';
-import {Auth, Parse, I18n} from 'hReact';
+import {Auth, Parse, I18n} from 'h-react';
 import Crypto from './Crypto';
 
 const ApiSave = (key, res) => {
