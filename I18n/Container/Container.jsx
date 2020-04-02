@@ -3,11 +3,11 @@ import {Radio, Drawer} from 'antd';
 import I18nConfig from '../Config';
 import Cookie from '../../Storage/Cookie';
 
-import './Tool.scss';
+import './Container.scss';
 
 const langJson = require('./lang.json');
 
-class Tool extends Component {
+class Container extends Component {
   static propTypes = {};
   static defaultProps = {};
 
@@ -17,22 +17,10 @@ class Tool extends Component {
     this.state = {
       defaultLang: Cookie.get('i18nDefaultLang') || I18nConfig.defaultLang,
       showTool: false,
-      placement: props.placement,
-      drawerPlacement: "right",
+      drawerPlacement: props.placement || "right",
     };
     this.originLang = this.state.defaultLang;
     this.changed = false;
-    switch (this.state.placement) {
-      case 'leftTop':
-      case 'leftBottom':
-        this.state.drawerPlacement = "left";
-        break;
-      case 'rightTop':
-      case 'rightBottom':
-      default:
-        this.state.drawerPlacement = "right";
-        break;
-    }
   };
 
   render() {
@@ -40,12 +28,12 @@ class Tool extends Component {
       return null;
     }
     return (
-      <div className={`toolbar ${this.state.placement}`}>
-        <div onClick={() => {
+      <span className={`toolbar ${this.state.placement}`}>
+        <span onClick={() => {
           this.setState({showTool: true})
         }}>
           {this.props.children}
-        </div>
+        </span>
         <Drawer
           title="CHOICE LANGUAGE"
           placement={this.state.drawerPlacement}
@@ -76,9 +64,9 @@ class Tool extends Component {
             }
           </Radio.Group>
         </Drawer>
-      </div>
+      </span>
     );
   }
 }
 
-export default Tool;
+export default Container;

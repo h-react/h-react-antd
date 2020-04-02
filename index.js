@@ -2,7 +2,7 @@ export {default as Api} from './Api';
 export {default as Auth} from './Auth';
 export {default as Anchor} from './Anchor';
 export {default as I18nConfig} from './I18n/Config';
-export {default as I18nTool} from './I18n/Tool/Tool';
+export {default as I18nContainer} from './I18n/Container/Container';
 export {default as I18n} from './I18n';
 export {default as Image} from './Image';
 export {default as Img} from './Image/Img/Img';
