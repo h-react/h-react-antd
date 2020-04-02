@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Radio, Drawer, Button} from 'antd';
-import {TranslationOutlined} from '@ant-design/icons';
+import {Radio, Drawer} from 'antd';
 import I18nConfig from '../Config';
 import Cookie from '../../Storage/Cookie';
 
@@ -13,6 +12,7 @@ class Tool extends Component {
   static defaultProps = {};
 
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       defaultLang: Cookie.get('i18nDefaultLang') || I18nConfig.defaultLang,
@@ -41,16 +41,11 @@ class Tool extends Component {
     }
     return (
       <div className={`toolbar ${this.state.placement}`}>
-        <Button
-          type="default"
-          icon={<TranslationOutlined/>}
-          size="large"
-          onClick={() => {
-            this.setState({showTool: true})
-          }}
-        >
-          Translation
-        </Button>
+        <div onClick={() => {
+          this.setState({showTool: true})
+        }}>
+          {this.props.children}
+        </div>
         <Drawer
           title="CHOICE LANGUAGE"
           placement={this.state.drawerPlacement}

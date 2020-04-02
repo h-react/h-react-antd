@@ -1,5 +1,13 @@
 import Cookie from '../../Storage/Cookie';
 
+const AntdShift = {
+  "en_us": "en_US",
+  "ja_jp": "ja_JP",
+  "ko_kr": "ko_KR",
+  "zh_cn": "zh_CN",
+  "zh_hk": "zh_TW",
+  "zh_tw": "zh_TW"
+};
 const Core = {
   lang: 'zh_cn',
   support: [],
@@ -26,15 +34,12 @@ const Core = {
     });
   },
   antd: () => {
-    const trans = {
-      "en_us": "en_US",
-      "ja_jp": "ja_JP",
-      "ko_kr": "ko_KR",
-      "zh_cn": "zh_CN",
-      "zh_hk": "zh_TW",
-      "zh_tw": "zh_TW"
-    };
-    return require('antd/es/locale/' + trans[Core.lang]).default;
+    let l = AntdShift[Core.lang];
+    if (l === undefined) {
+      l = AntdShift.en_us
+    }
+    const obj = require(`antd/es/locale/${l}.js`);
+    return obj.default;
   },
 };
 
