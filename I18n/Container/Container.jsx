@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Radio, Drawer} from 'antd';
 import I18nConfig from '../Config';
-import Cookie from '../../Storage/Cookie';
 
 import './Container.scss';
 
@@ -15,7 +14,7 @@ class Container extends Component {
     console.log(props);
     super(props);
     this.state = {
-      defaultLang: Cookie.get('i18nDefaultLang') || I18nConfig.defaultLang,
+      defaultLang: localStorage.i18nDefaultLang || I18nConfig.defaultLang,
       showTool: false,
       drawerPlacement: props.placement || "right",
     };
@@ -42,7 +41,7 @@ class Container extends Component {
             this.setState({
               showTool: false,
             });
-            if (this.changed && this.originLang !== Cookie.get('i18nDefaultLang')) {
+            if (this.changed && this.originLang !== localStorage.i18nDefaultLang) {
               location.reload();
             }
           }}
@@ -51,7 +50,7 @@ class Container extends Component {
           <Radio.Group
             defaultValue={this.state.defaultLang}
             onChange={(evt) => {
-              Cookie.set('i18nDefaultLang', evt.target.value, 30);
+              localStorage.i18nDefaultLang = evt.target.value;
               this.changed = true;
             }}
           >

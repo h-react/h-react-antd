@@ -1,5 +1,3 @@
-import Cookie from '../../Storage/Cookie';
-
 const AntdShift = {
   "en_us": "en_US",
   "ja_jp": "ja_JP",
@@ -13,8 +11,8 @@ const Core = {
   support: [],
   data: {},
   setLang: (lang) => {
-    let tempLang = Cookie.get('i18nDefaultLang');
-    if (tempLang === '') {
+    let tempLang = localStorage.i18nDefaultLang;
+    if (!tempLang) {
       tempLang = lang
     }
     Core.lang = tempLang;
