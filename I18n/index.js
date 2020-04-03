@@ -1,4 +1,11 @@
 import Config from './Config';
+import Api from './../Api';
+
+const i18nBtn = {
+  color: 'yellow',
+  textDecoration: 'underline',
+  background: '#000000',
+};
 
 const Index = (trans, lang = null) => {
   if (lang === null) {
@@ -15,18 +22,28 @@ const Index = (trans, lang = null) => {
   ].includes(lang);
 
   let rl = [];
+  if (Config.data[lang] === undefined) {
+    console.error('i18n lang config:' + lang);
+    return
+  }
   trans.forEach((t, idx) => {
     t = t.toUpperCase();
-    let l = (Config.data[lang] && Config.data[lang][t]) ? Config.data[lang][t] : null;
-    if (!l) l = (Config.data[Config.lang] && Config.data[Config.lang][t]) ? Config.data[Config.lang][t] : null;
+    if (Config.data[Config.lang][t] === undefined) {
+      Api.delete().real('I18N_SET', {unique_key: t}, (res) => {
+        if (res.code !== 200) {
+          console.error(res);
+        }
+      });
+    }
+    let l = Config.data[lang][t];
     if (!l) {
-      rl.push('[I18N]' + t);
+      rl.push(`{I18N${t}}`);
     } else {
       if (!isChinese) {
         if (idx === 0) {
           l = l.replace(l[0], l[0].toUpperCase());
         } else {
-          l = l.toLowerCase();
+          l = ' ' + l.toLowerCase();
         }
       }
       rl.push(l);
