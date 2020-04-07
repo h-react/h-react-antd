@@ -29,7 +29,7 @@ const Index = (trans, lang = null) => {
   trans.forEach((t, idx) => {
     t = t.toUpperCase();
     if (Config.data[Config.lang][t] === undefined) {
-      Api.delete().real('I18N_SET', {unique_key: t}, (res) => {
+      Api.delete().real('I18N_SET', {unique_key: t, source: 'ui'}, (res) => {
         if (res.code !== 200) {
           console.error(res);
         }
