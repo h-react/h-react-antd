@@ -129,7 +129,8 @@ const Http = {
             error.message = I18n('API_ERROR_NOT_SUPPORT_HTTP');
             break;
           default:
-            error.message = I18n('API_ERROR_DEFAULT') + `(${status})!`;
+            console.error(error.message);
+            error.message = I18n('API_ERROR_DEFAULT') + `(${status}):` + error.message;
         }
         then({code: status, msg: error.message, data: null});
       });
