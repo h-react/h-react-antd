@@ -78,6 +78,9 @@ const Socket = {
           } else {
             const res = Socket.stack[stackIndex].apis[key];
             if (typeof res === 'object') {
+              if (res.msg && res.msg !== '') {
+                res.msg = I18n(res.msg)
+              }
               response.push(res);
               if (typeof res.code === 'number' && res.code === 403) {
                 hasNotAuth = true;

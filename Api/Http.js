@@ -84,6 +84,9 @@ const Http = {
             then({code: 500, msg: I18n('LIMITED_OPERATION'), data: null});
             return;
           }
+          if (response.data.msg && response.data.msg !== '') {
+            response.data.msg = I18n(response.data.msg)
+          }
           then(response.data);
           if (refresh === false && typeof response.data.code === 'number' && response.data.code === 200 && key.length < Http.CacheKeyLimit) {
             ApiSave(key, response.data);
@@ -183,6 +186,9 @@ const Http = {
           }
           if (Crypto.is(crypto)) {
             response.data = Crypto.decode(response.data, crypto);
+          }
+          if (response.data.msg && response.data.msg !== '') {
+            response.data.msg = I18n(response.data.msg)
           }
           if (typeof response.data === 'object') {
             if (typeof response.data.code === 'number' && response.data.code === 403) {
