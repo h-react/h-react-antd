@@ -23,7 +23,6 @@ const Index = (trans, lang = null) => {
 
   let rl = [];
   if (Config.data[lang] === undefined) {
-    console.error('i18n lang config:' + lang);
     return
   }
   trans.forEach((t, idx) => {
