@@ -26,11 +26,11 @@ const Parse = {
    * @param param
    * @param key
    * @param encode
+   * @param paramStr
    * @returns {string}
    */
-  urlEncode: (param, key = null, encode = null) => {
+  urlEncode: (param, key = null, encode = null, paramStr = '') => {
     if (param == null) return '';
-    let paramStr = '';
     let t = typeof (param);
     if (t === 'string' || t === 'number' || t === 'boolean') {
       paramStr += paramStr === '' ? '?' : '&';
@@ -38,7 +38,7 @@ const Parse = {
     } else {
       for (let i in param) {
         const k = !key ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i);
-        paramStr += Parse.urlEncode(param[i], k, encode);
+        paramStr = Parse.urlEncode(param[i], k, encode, paramStr);
       }
     }
     return paramStr;
