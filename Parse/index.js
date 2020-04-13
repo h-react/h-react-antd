@@ -22,6 +22,29 @@ const Parse = {
   },
 
   /**
+   * 参数转url
+   * @param param
+   * @param key
+   * @param encode
+   * @returns {string}
+   */
+  urlEncode: (param, key = null, encode = null) => {
+    if (param == null) return '';
+    let paramStr = '';
+    let t = typeof (param);
+    if (t === 'string' || t === 'number' || t === 'boolean') {
+      paramStr += paramStr === '' ? '?' : '&';
+      paramStr += (key ? key : '') + '=' + ((encode == null || encode) ? encodeURIComponent(param) : param);
+    } else {
+      for (let i in param) {
+        const k = !key ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i);
+        paramStr += Parse.urlEncode(param[i], k, encode);
+      }
+    }
+    return paramStr;
+  },
+
+  /**
    * 比较两个值的大小
    * data1 > data2返回 1
    * data1 < data2返回 -1
