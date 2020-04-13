@@ -1,6 +1,27 @@
 const Parse = {
 
   /**
+   * 获取react，url搜索参数
+   * @param props
+   * @returns {{}}
+   */
+  urlSearch: (props) => {
+    let search = props.location.search;
+    if (!search) {
+      return {};
+    }
+    search = search.split('?')[1];
+    search = search.split('&');
+    const params = {};
+    search.forEach((v) => {
+      v = v.split('=');
+      const n = Number(v[1]);
+      params[v[0]] = !isNaN(n) ? n : v[1];
+    });
+    return params;
+  },
+
+  /**
    * 比较两个值的大小
    * data1 > data2返回 1
    * data1 < data2返回 -1
