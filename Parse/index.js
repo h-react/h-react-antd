@@ -14,6 +14,7 @@ const Parse = {
     search = search.split('&');
     const params = {};
     search.forEach((v) => {
+      v = decodeURIComponent(v)
       v = v.split('=');
       const n = Number(v[1]);
       params[v[0]] = !isNaN(n) ? n : v[1];
@@ -30,7 +31,7 @@ const Parse = {
    * @returns {string}
    */
   urlEncode: (param, key = null, encode = null, paramStr = '') => {
-    if (param == null) return '';
+    if (!param) return paramStr;
     let t = typeof (param);
     if (t === 'string' || t === 'number' || t === 'boolean') {
       paramStr += paramStr === '' ? '?' : '&';

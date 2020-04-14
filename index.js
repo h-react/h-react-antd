@@ -10,6 +10,5 @@ export {default as Picture} from './Image/Picture';
 export {default as Cookie} from './Storage/Cookie';
 export {default as Parse} from './Parse';
 export {default as Path} from './Path';
-export {default as AntvG2} from './AntvG2';
 export {default as Xoss} from './Xoss';
 export {default as Moment} from './Moment';
