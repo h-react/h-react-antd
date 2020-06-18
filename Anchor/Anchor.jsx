@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Anchor.scss';
+import './Anchor.less';
 
 class Anchor extends Component {
   static defaultProps = {};

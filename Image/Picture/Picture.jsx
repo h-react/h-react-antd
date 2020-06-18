@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Modal} from 'antd';
 
-import './Picture.scss';
+import './Picture.less';
 import Parse from "../../Parse";
 
 class Picture extends Component {

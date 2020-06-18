@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Radio, Drawer} from 'antd';
 import I18nConfig from '../Config';
 
-import './Container.scss';
+import './Container.less';
 
 const langJson = require('./lang.json');
 

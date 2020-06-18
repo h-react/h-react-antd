@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {List} from 'immutable';
 import {Upload, message, Button, Icon} from 'antd';
 
-import './Xoss.scss';
+import './Xoss.less';
 
 const {ImageUpload} = Upload;
 const {CropUpload} = Upload;
