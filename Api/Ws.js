@@ -94,7 +94,7 @@ const Socket = {
         });
       if (totalFinish === true) {
         if (hasNotAuth === true) {
-          if (Auth.getUid() !== undefined) {
+          if (Auth.getUserId() !== undefined) {
             message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
               location.href = Ws.PathLogin;
             });
@@ -180,7 +180,7 @@ const Ws = {
     };
     refresh = typeof refresh === 'boolean' ? refresh : false;
     conf.refresh = refresh;
-    params.auth_uid = Auth.getUid();
+    params.auth_user_id = Auth.getUserId();
     const apiStack = scope + Parse.jsonEncode(params);
     if (refresh === false && apiStack.length < Ws.CacheKeyLimit && ApiLoad(apiStack) !== null) {
       then(ApiLoad(apiStack));
@@ -208,10 +208,10 @@ const Ws = {
     refresh = typeof refresh === 'boolean' ? refresh : false;
     if (Array.isArray(params)) {
       params.forEach((p) => {
-        p.auth_uid = Auth.getUid();
+        p.auth_user_id = Auth.getUserId();
       });
     } else {
-      params.auth_uid = Auth.getUid();
+      params.auth_user_id = Auth.getUserId();
     }
     let resultQty = 0;
     Socket.stackIndex += 1;

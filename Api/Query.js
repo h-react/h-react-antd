@@ -22,7 +22,7 @@ const Query = function (setting) {
    * @param params
    */
   this.appendParams = (params) => {
-    params.auth_uid = Auth.getUid();
+    params.auth_user_id = Auth.getUserId();
     if (this.append === null) {
       return;
     }

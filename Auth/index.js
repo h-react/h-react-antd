@@ -1,7 +1,7 @@
 import nanoid from 'nanoid';
 
 const Auth = {
-  uid: '_HU1359',
+  user_id: '_HU1359',
   account: '_IDT4425',
   remember: '_REB1873',
   loginPath: '/sign/in',
@@ -67,14 +67,14 @@ const Auth = {
    * 用户ID
    * @returns {*|string}
    */
-  getUid: () => {
-    return localStorage[Auth.uid];
+  getUserId: () => {
+    return localStorage[Auth.user_id];
   },
-  setUid: (val) => {
-    localStorage[Auth.uid] = val;
+  setUserId: (val) => {
+    localStorage[Auth.user_id] = val;
   },
   clearUid: () => {
-    localStorage[Auth.uid] = '';
+    localStorage[Auth.user_id] = '';
   },
   /**
    * 登录检验
@@ -82,7 +82,7 @@ const Auth = {
    */
   isOnline: () => {
     let is = false;
-    if (Auth.getUid() && Auth.getUid().length > 0) {
+    if (Auth.getUserId() && Auth.getUserId().length > 0) {
       is = true;
     }
     return is;

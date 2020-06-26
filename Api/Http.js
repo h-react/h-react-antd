@@ -57,7 +57,7 @@ const Http = {
     const header = conf.header || {};
     const queryType = conf.queryType || 'post';
     refresh = typeof refresh === 'boolean' ? refresh : false;
-    params.auth_uid = Auth.getUid();
+    params.auth_user_id = Auth.getUserId();
     const key = scope + Parse.jsonEncode(params);
     if (refresh === false && key.length < Http.CacheKeyLimit && ApiLoad(key) !== null) {
       then(ApiLoad(key));
@@ -76,7 +76,7 @@ const Http = {
         }
         if (typeof response.data === 'object') {
           if (typeof response.data.code === 'number' && response.data.code === 403) {
-            if (Auth.getUid() !== undefined) {
+            if (Auth.getUserId() !== undefined) {
               message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
                 Path.locationTo(Http.PathLogin);
               });
@@ -149,10 +149,10 @@ const Http = {
     refresh = typeof refresh === 'boolean' ? refresh : true;
     if (Array.isArray(params)) {
       params.forEach((p) => {
-        p.auth_uid = Auth.getUid();
+        p.auth_user_id = Auth.getUserId();
       });
     } else {
-      params.auth_uid = Auth.getUid();
+      params.auth_user_id = Auth.getUserId();
     }
     const realKey = [];
     const real = [];
@@ -204,7 +204,7 @@ const Http = {
           }
         });
         if (hasNotAuth === true) {
-          if (Auth.getUid() !== undefined) {
+          if (Auth.getUserId() !== undefined) {
             message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
               Path.locationTo(Http.PathLogin);
             });

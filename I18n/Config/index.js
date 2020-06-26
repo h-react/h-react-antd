@@ -26,8 +26,8 @@ const Core = {
         if (Core.data[sv] === undefined) {
           Core.data[sv] = {};
         }
-        const uk = ljv.y_i18n_unique_key;
-        Core.data[sv][uk] = ljv[`y_i18n_${sv}`] || '';
+        const uk = ljv.i18n_unique_key;
+        Core.data[sv][uk] = ljv[`i18n_${sv}`] || '';
       });
     });
   },
