@@ -10,14 +10,14 @@ const Auth = {
    * 设置登录路径
    * @returns {*|string}
    */
-  setLoginPath: (path) => {
+  setLoginUrl: (path) => {
     Auth.loginPath = path;
   },
   /**
    * 获取登录路径
    * @returns {*|string}
    */
-  getLoginPath: () => {
+  getLoginUrl: () => {
     return Auth.loginPath;
   },
   /**
