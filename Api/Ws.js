@@ -156,18 +156,14 @@ const Ws = {
   CacheKeyLimit: 3000,
   PathLogin: null,
   cache: (conf) => {
-    if (Array.isArray(conf.scope)) {
-      Ws.runAll(conf, false);
-    } else if (typeof conf.scope === 'string') {
+    if (typeof conf.scope === 'string') {
       Ws.run(conf, false);
     } else {
       message.error(I18n('SCOPE_ERROR'));
     }
   },
   real: (conf) => {
-    if (Array.isArray(conf.scope)) {
-      Ws.runAll(conf, true);
-    } else if (typeof conf.scope === 'string') {
+    if (typeof conf.scope === 'string') {
       Ws.run(conf, true);
     } else {
       message.error(I18n('SCOPE_ERROR'));
@@ -199,53 +195,7 @@ const Ws = {
     console.log(r);
     r = Parse.jsonEncode(r);
     Socket.send(conf, r);
-  },
-  runAll: (conf, refresh) => {
-    const scope = conf.scope || null;
-    const params = conf.params || {};
-    const then = conf.then || function () {
-    };
-    refresh = typeof refresh === 'boolean' ? refresh : false;
-    if (Array.isArray(params)) {
-      params.forEach((p) => {
-        p.auth_user_id = Auth.getUserId();
-      });
-    } else {
-      params.auth_user_id = Auth.getUserId();
-    }
-    let resultQty = 0;
-    Socket.stackIndex += 1;
-    if (Socket.stackIndex > Socket.stackLimit) {
-      Socket.stackIndex = 0;
-    }
-    Socket.stack[Socket.stackIndex] = {};
-    Socket.stack[Socket.stackIndex].then = then;
-    Socket.stack[Socket.stackIndex].apis = {};
-    //
-    scope.forEach((s, idx) => {
-      const p = Array.isArray(params) ? params[idx] : params;
-      const apiStack = s + Parse.jsonEncode(p);
-      if (refresh === false && apiStack.length < Ws.CacheKeyLimit && ApiLoad(apiStack) !== null) {
-        Socket.stack[Socket.stackIndex].apis[apiStack] = ApiLoad(apiStack);
-        resultQty += 1;
-      } else {
-        let r = {client_id: Auth.getClientId(), scope: s, ...p};
-        Socket.stack[Socket.stackIndex].apis[apiStack] = false;
-        r.stack = `${Socket.stackIndex}#STACK#${apiStack}`;
-        r = Parse.jsonEncode(r);
-        Socket.send(conf, r);
-      }
-    });
-    if (resultQty === scope.length) {
-      const res = [];
-      Object.entries(Socket.stack[Socket.stackIndex].apis)
-        .forEach(([key, value]) => {
-          console.log(key);
-          res.push(value);
-        });
-      then(res);
-    }
-  },
+  }
 };
 
 export default Ws;

@@ -30,18 +30,14 @@ const Http = {
   CacheKeyLimit: 3000,
   PathLogin: null,
   cache: (conf) => {
-    if (Array.isArray(conf.scope)) {
-      Http.runAll(conf, false);
-    } else if (typeof conf.scope === 'string') {
+    if (typeof conf.scope === 'string') {
       Http.run(conf, false);
     } else {
       message.error(I18n('SCOPE_ERROR'));
     }
   },
   real: (conf) => {
-    if (Array.isArray(conf.scope)) {
-      Http.runAll(conf, true);
-    } else if (typeof conf.scope === 'string') {
+    if (typeof conf.scope === 'string') {
       Http.run(conf, true);
     } else {
       message.error(I18n('SCOPE_ERROR'));
@@ -63,11 +59,18 @@ const Http = {
       then(ApiLoad(key));
       return;
     }
-
+    let axiosData = null;
+    let axiosParams = null;
+    if (queryType === 'get') {
+      axiosParams = {client_id: Auth.getClientId(), scope: scope, ...params};
+    } else {
+      axiosData = Crypto.encode({client_id: Auth.getClientId(), scope: scope, ...params}, crypto);
+    }
     axios({
       method: queryType,
       url: host,
-      data: Crypto.encode({client_id: Auth.getClientId(), scope: scope, ...params}, crypto),
+      data: axiosData,
+      params: axiosParams,
       config: header
     })
       .then((response) => {
@@ -136,87 +139,6 @@ const Http = {
             error.message = I18n('API_ERROR_DEFAULT') + `(${status}):` + error.message;
         }
         then({code: status, msg: error.message, data: null});
-      });
-  },
-  runAll: (conf, refresh) => {
-    const host = conf.host || null;
-    const scope = conf.scope || null;
-    const params = conf.params || {};
-    const then = conf.then || function () {
-    };
-    const crypto = conf.crypto || null;
-    const header = conf.header || {};
-    refresh = typeof refresh === 'boolean' ? refresh : true;
-    if (Array.isArray(params)) {
-      params.forEach((p) => {
-        p.auth_user_id = Auth.getUserId();
-      });
-    } else {
-      params.auth_user_id = Auth.getUserId();
-    }
-    const realKey = [];
-    const real = [];
-    const result = [];
-    let resultQty = 0;
-    scope.forEach((s, idx) => {
-      const key = s + Parse.jsonEncode(Array.isArray(params) ? params[idx] : params);
-      if (refresh === false && key.length < Http.CacheKeyLimit && ApiLoad(key) !== null) {
-        result[idx] = ApiLoad(key);
-        resultQty += 1;
-      } else {
-        realKey[idx] = key;
-        real.push(axios.post(host, Crypto.encode({
-          client_id: Auth.getClientId(),
-          scope: s, ...(Array.isArray(params) ? params[idx] : params)
-        }, crypto), header));
-      }
-    });
-    if (resultQty === scope.length) {
-      then(result);
-      return;
-    }
-    axios
-      .all(real)
-      .then((all) => {
-        let hasNotAuth = false;
-        all.forEach((response, idx) => {
-          let pushIdx = idx;
-          while (result[pushIdx] !== undefined) {
-            pushIdx += 1;
-          }
-          if (Crypto.is(crypto)) {
-            response.data = Crypto.decode(response.data, crypto);
-          }
-          if (response.data.msg && response.data.msg !== '') {
-            response.data.msg = I18n(response.data.msg)
-          }
-          if (typeof response.data === 'object') {
-            if (typeof response.data.code === 'number' && response.data.code === 403) {
-              hasNotAuth = true;
-            } else if (typeof response.data.code === 'number' && response.data.code === 200) {
-              result[pushIdx] = response.data;
-              if (refresh === false && realKey[pushIdx].length < Http.CacheKeyLimit) {
-                ApiSave(realKey[pushIdx], response.data);
-              }
-            }
-          } else {
-            result[pushIdx] = {code: 500, response: I18n('API_ERROR'), data: null};
-          }
-        });
-        if (hasNotAuth === true) {
-          if (Auth.getUserId() !== undefined) {
-            message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
-              Path.locationTo(Http.PathLogin);
-            });
-          } else {
-            message.warning(I18n('OPERATION_NOT_PERMISSION'));
-          }
-        } else {
-          then(result);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
       });
   },
 };
