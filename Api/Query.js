@@ -147,16 +147,19 @@ const Query = function (setting) {
    * @param params
    */
   this.appendParams = (params) => {
-    if (typeof params === "object") {
-      params = [params];
-    }
-    console.log(params);
     if (this.append === null) {
       return;
     }
-    for (let key in this.append) {
-      if (typeof params[key] === "undefined") { // 可指定,不覆盖
-        params[key] = this.append[key];
+    for (let k in params) {
+      for (let k2 in this.append) {
+        if (typeof params[k] === 'object') {
+          if (typeof params[k][k2] === "undefined") { // 不覆盖已有数据
+            params[k][k2] = this.append[k2];
+          }
+        }
+      }
+      if (typeof params[k].scopes === 'object') {
+        this.appendParams(params[k].scopes)
       }
     }
     return params;
