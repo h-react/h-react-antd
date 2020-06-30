@@ -27,8 +27,8 @@ const Index = (trans, lang = null) => {
   }
   trans.forEach((t, idx) => {
     t = t.toUpperCase();
-    if (Config.data[Config.lang][t] === undefined) {
-      Api.delete().real('I18N_SET', {unique_key: t}, (res) => {
+    if (Config.data[lang][t] === undefined || !Config.data[lang][t]) {
+      Api.query().post({I18N_SET: {unique_key: t}}, (res) => {
         if (res.code !== 200) {
           console.error(res);
         }
