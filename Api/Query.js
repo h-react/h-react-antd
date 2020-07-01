@@ -196,9 +196,6 @@ const Query = function (setting) {
             then({code: 500, msg: I18n('LIMITED_OPERATION'), data: null});
             return;
           }
-          if (response.data.msg && response.data.msg !== '') {
-            response.data.msg = I18n(response.data.msg)
-          }
           then(response.data);
         } else {
           then({code: 500, msg: I18n('API_ERROR'), data: null});
