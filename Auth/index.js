@@ -87,23 +87,6 @@ const Auth = {
     }
     return is;
   },
-  /**
-   * 用户名自适应
-   * @param data
-   * @returns {string}
-   */
-  userName: (data) => {
-    let name = '';
-    if (typeof data !== 'object') {
-      name = 'loading';
-    }
-    if (data.user_mobile) name = data.user_mobile;
-    if (data.user_email) name = data.user_email;
-    if (data.user_login_name) name = data.user_login_name;
-    if (data.user_identity_name) name = data.user_identity_name;
-    if (data.user_info_nickname) name = data.user_info_nickname;
-    return name;
-  },
 };
 
 export default Auth;

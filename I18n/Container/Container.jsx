@@ -11,7 +11,6 @@ class Container extends Component {
   static defaultProps = {};
 
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       defaultLang: localStorage.i18nDefaultLang || I18nConfig.defaultLang,
