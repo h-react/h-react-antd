@@ -29,7 +29,6 @@ const LocalStorage = {
     } catch (error) {
       data = item
     }
-    console.log(key, data);
     if (data) {
       if (data.startTime) {
         let date = new Date().getTime();
