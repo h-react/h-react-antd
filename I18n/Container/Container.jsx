@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Radio, Drawer} from 'antd';
 import I18nConfig from '../Config';
+import LocalStorage from "../../Storage/LocalStorage";
 
 import './Container.less';
 
@@ -13,7 +14,7 @@ class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      defaultLang: localStorage.i18nDefaultLang || I18nConfig.defaultLang,
+      defaultLang: LocalStorage.get('i18nDefaultLang') || I18nConfig.defaultLang,
       showTool: false,
       drawerPlacement: props.placement || "right",
     };
@@ -40,7 +41,7 @@ class Container extends Component {
             this.setState({
               showTool: false,
             });
-            if (this.changed && this.originLang !== localStorage.i18nDefaultLang) {
+            if (this.changed && this.originLang !== LocalStorage.get('i18nDefaultLang')) {
               location.reload();
             }
           }}
@@ -49,7 +50,7 @@ class Container extends Component {
           <Radio.Group
             defaultValue={this.state.defaultLang}
             onChange={(evt) => {
-              localStorage.i18nDefaultLang = evt.target.value;
+              LocalStorage.set('i18nDefaultLang', evt.target.value)
               this.changed = true;
             }}
           >

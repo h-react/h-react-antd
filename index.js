@@ -8,6 +8,8 @@ export {default as Image} from './Image';
 export {default as Img} from './Image/Img/Img';
 export {default as Picture} from './Image/Picture';
 export {default as Cookie} from './Storage/Cookie';
+export {default as LocalStorage} from './Storage/LocalStorage';
+export {default as SessionStorage} from './Storage/SessionStorage';
 export {default as Parse} from './Parse';
 export {default as Path} from './Path';
 export {default as Xoss} from './Xoss';

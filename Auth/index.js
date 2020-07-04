@@ -1,4 +1,5 @@
 import nanoid from 'nanoid';
+import LocalStorage from './../Storage/LocalStorage';
 
 const Auth = {
   user_id: '_HU1359',
@@ -38,54 +39,50 @@ const Auth = {
    * 获取客户端ID
    */
   getClientId: () => {
-    if (localStorage.cid === undefined) {
-      localStorage.cid = nanoid(42) + (new Date()).getTime().toString(36);
+    if (LocalStorage.get('cid') === null) {
+      LocalStorage.set('cid', nanoid(42) + (new Date()).getTime().toString(36));
     }
-    return localStorage.cid;
+    return LocalStorage.get('cid');
   },
   /**
    * 记住账号
    * @returns {*|string}
    */
   getAccount: () => {
-    return localStorage[Auth.account];
+    return LocalStorage.get(Auth.account);
   },
   setAccount: (val) => {
-    localStorage[Auth.account] = val;
+    LocalStorage.set(Auth.account, val)
   },
   /**
    * 是否记住账号
    * @returns {*|string}
    */
   getRemember: () => {
-    return localStorage[Auth.remember] === '1';
+    return LocalStorage.get(Auth.remember) === 1;
   },
   setRemember: (val) => {
-    localStorage[Auth.remember] = val;
+    LocalStorage.set(Auth.remember, val);
   },
   /**
    * 用户ID
    * @returns {*|string}
    */
   getUserId: () => {
-    return localStorage[Auth.user_id];
+    return LocalStorage.get(Auth.user_id);
   },
   setUserId: (val) => {
-    localStorage[Auth.user_id] = val;
+    LocalStorage.set(Auth.user_id, val);
   },
   clearUid: () => {
-    localStorage[Auth.user_id] = '';
+    LocalStorage.clear(Auth.user_id);
   },
   /**
    * 登录检验
    * @returns {boolean}
    */
   isOnline: () => {
-    let is = false;
-    if (Auth.getUserId() && Auth.getUserId().length > 0) {
-      is = true;
-    }
-    return is;
+    return Auth.getUserId() !== null;
   },
 };
 

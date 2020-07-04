@@ -1,3 +1,5 @@
+import LocalStorage from "../../Storage/LocalStorage";
+
 const AntdShift = {
   "en_us": "en_US",
   "ja_jp": "ja_JP",
@@ -11,9 +13,10 @@ const Core = {
   support: [],
   data: {},
   setLang: (lang) => {
-    let tempLang = localStorage.i18nDefaultLang;
+    let tempLang = LocalStorage.get('i18nDefaultLang');
     if (!tempLang) {
       tempLang = lang
+      LocalStorage.set('i18nDefaultLang', lang);
     }
     Core.lang = tempLang;
   },
