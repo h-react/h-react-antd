@@ -177,7 +177,6 @@ const Query = function (setting) {
       url: this.host,
       data: Crypto.encode({
         client_id: Auth.getClientId(),
-        logging_id: Auth.getUserId(),
         scopes: params
       }, this.crypto),
       config: {}
@@ -187,7 +186,7 @@ const Query = function (setting) {
           response.data = Crypto.decode(response.data, this.crypto);
         }
         if (typeof response.data === 'object') {
-          if (typeof response.data.code === 'number' && response.data.code === 403) {
+          if (typeof response.data.code === 'number' && response.data.code === 444) {
             if (Auth.getUserId() !== undefined) {
               message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
                 Path.locationTo(this.loginUrl);
@@ -263,7 +262,6 @@ const Query = function (setting) {
     Socket.stack[Socket.stackIndex].apis[apiStack] = false;
     let r = {
       client_id: Auth.getClientId(),
-      logging_id: Auth.getUserId(),
       scopes: params
     };
     r.stack = `${Socket.stackIndex}#STACK#${apiStack}`;
