@@ -1,0 +1,175 @@
+@charset "UTF-8";
+
+@mainColor: #108ee9;
+@animateDur: 0.4s;
+
+@keyframes iconAnimate {
+  0% {
+    color: #42ab42;
+    text-shadow: 10px 10px #42ab42;
+  }
+  50% {
+    color: #888888;
+    text-shadow: 1px 1px #888888;
+    transition: all 0.5s;
+  }
+  100% {
+    color: #42ab42;
+    text-shadow: 10px 10px #42ab42;
+  }
+}
+
+/* iPhoneX之后的适配 */
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .app {
+    padding-bottom: 1.7rem;
+  }
+}
+
+.app {
+  flex: 1;
+  width: 100%;
+  overflow-x: hidden;
+
+  #wx-mark {
+    position: fixed;
+    top: 30%;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 0;
+    height: 0;
+    line-height: 10;
+    border-radius: 50%;
+    background: #42ab42;
+    opacity: 1;
+    transition: all 0.5s;
+  }
+
+  #wx-mark.logging {
+    display: none;
+  }
+
+  #wx-mark.login1 {
+    top: 0;
+    width: 160%;
+    height: 100%;
+    line-height: 100%;
+    border-radius: 0;
+    opacity: 1;
+  }
+
+  #wx-mark.login2 {
+    top: 100%;
+    width: 100%;
+    opacity: 0;
+    border-radius: 0;
+  }
+
+  .subPages {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .back {
+      position: fixed;
+      top: 0;
+      left: 0;
+      line-height: 45px;
+      padding: 0 15px 0 15px;
+      margin: 0;
+      font-size: 16px;
+      z-index: 20;
+      color: #444444;
+      opacity: 0;
+      transition: all 0.3s;
+      transform: translateX(-50%);
+    }
+
+    .back:active {
+      padding: 0 18px 0 6px;
+      font-size: 20px;
+    }
+
+    .back.show {
+      opacity: 1;
+      transform: translateX(0%);
+    }
+
+    .subs {
+      position: relative;
+      flex: 1;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        opacity: 1;
+        transition: all @animateDur;
+        background: #ffffff;
+        transform: scale(1, 1) translateX(100%);
+        filter: grayscale(0%);
+      }
+
+      > div.diving {
+        z-index: 6;
+        transform: scale(0.8, 0.8) translateX(-116%);
+        filter: grayscale(100%);
+      }
+
+      > div.first {
+        z-index: 7;
+        opacity: 1;
+        transition: all 0s;
+        transform: translateX(0);
+        filter: grayscale(0%);
+      }
+
+      > div.face {
+        z-index: 8;
+        opacity: 1;
+        transform: scale(1, 1) translateX(0);
+        filter: grayscale(0%);
+      }
+
+      > div.leave {
+        z-index: 9;
+        opacity: 1;
+        transform: translateX(100%);
+        filter: grayscale(0%);
+      }
+
+    }
+  }
+
+  .waitingWechat {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 40%;
+    text-align: center;
+
+    .anticon.anticon-wechat {
+      font-size: 23vw;
+      animation: iconAnimate 4s infinite linear;
+    }
+
+    .anticon.anticon-wechat.logging {
+      font-size: 50rem;
+    }
+
+    .tips {
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+  }
+}

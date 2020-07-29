@@ -2,10 +2,10 @@ import nanoid from 'nanoid';
 import LocalStorage from './../Storage/LocalStorage';
 
 const Auth = {
-  user_id: '_HU1359',
+  logging_id: '_LG2359',
   account: '_IDT4425',
   remember: '_REB1873',
-  loginPath: '/sign/in',
+  loginPath: '/login',
   apiUrl: null,
   /**
    * 设置登录路径
@@ -65,24 +65,24 @@ const Auth = {
     LocalStorage.set(Auth.remember, val);
   },
   /**
-   * 用户ID
+   * 登录ID
    * @returns {*|string}
    */
-  getUserId: () => {
-    return LocalStorage.get(Auth.user_id);
+  getLoggingId: () => {
+    return LocalStorage.get(Auth.logging_id);
   },
-  setUserId: (val) => {
-    LocalStorage.set(Auth.user_id, val);
+  setLoggingId: (val) => {
+    LocalStorage.set(Auth.logging_id, val);
   },
-  clearUid: () => {
-    LocalStorage.clear(Auth.user_id);
+  clearLogging: () => {
+    LocalStorage.clear(Auth.logging_id);
   },
   /**
    * 登录检验
    * @returns {boolean}
    */
-  isOnline: () => {
-    return Auth.getUserId() !== null;
+  isLogging: () => {
+    return Auth.getLoggingId() !== null;
   },
 };
 
