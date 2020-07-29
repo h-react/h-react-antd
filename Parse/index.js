@@ -1,25 +1,46 @@
 const Parse = {
 
   /**
-   * 获取react，url搜索参数
-   * @param props
+   * 获取pathname
    * @returns {{}}
    */
-  urlSearch: (props) => {
-    let search = props.location.search;
-    if (!search) {
-      return {};
+  urlDispatch: (location) => {
+    location = location || window.location.href;
+    const url = location.replace(window.location.protocol + '//' + window.location.host, '').replace('/#', '');
+    const dispatch = url.split('?')
+    let pathname = dispatch[0];
+    const searchStr = dispatch[1] || '';
+    const search = {};
+    if (searchStr !== '') {
+      let searchArr = searchStr.split('&');
+      searchArr.forEach((v) => {
+        v = decodeURIComponent(v)
+        v = v.split('=');
+        const n = Number(v[1]);
+        search[v[0]] = !isNaN(n) ? n : v[1];
+      });
     }
-    search = search.split('?')[1];
-    search = search.split('&');
-    const params = {};
-    search.forEach((v) => {
-      v = decodeURIComponent(v)
-      v = v.split('=');
-      const n = Number(v[1]);
-      params[v[0]] = !isNaN(n) ? n : v[1];
-    });
-    return params;
+    return {
+      url: url,
+      pathname: pathname,
+      search: search,
+    };
+  },
+
+  /**
+   * 获取url pathName
+   * @returns string
+   */
+  urlPathName: () => {
+    return Parse.urlDispatch().pathname;
+  },
+
+  /**
+   * 获取url搜索参数
+   * @returns {{}}
+   */
+  urlSearch: () => {
+    return Parse.urlDispatch().search;
   },
 
   /**
@@ -43,6 +64,91 @@ const Parse = {
       }
     }
     return paramStr;
+  },
+
+  cleanHTML: (txt) => {
+    return txt.replace(/\s/g, "")
+      .replace('\t', "")
+      .replace('\n', "")
+      .replace('\r', "")
+      .replace(/(<([^>]+)>)/ig, "")
+      .replace(/&.*?;/ig, "");
+  },
+
+  limitStr: (txt, len) => {
+    let strLen = 0;
+    let s = "";
+    for (let i = 0; i < txt.length; i++) {
+      if (txt.charCodeAt(i) > 128) {
+        strLen += 2;
+      } else {
+        strLen++;
+      }
+      s += txt.charAt(i);
+      if (strLen >= len) {
+        return s + "...";
+      }
+    }
+    return s;
+  },
+
+  /**
+   * antd mapping value转文本
+   */
+  mapLabel: (map, value) => {
+    if (!map || !value) {
+      return '';
+    }
+    let res = '';
+    for (const k in map) {
+      if (map[k].value === value) {
+        res = map[k].label;
+        break;
+      }
+    }
+    return res;
+  },
+
+  /**
+   * antd mapping label转value
+   */
+  mapValue: (map, label) => {
+    if (!map || !label) {
+      return '';
+    }
+    let res = '';
+    for (const k in map) {
+      if (map[k].label === label) {
+        res = map[k].value;
+        break;
+      }
+    }
+    return res;
+  },
+
+  /**
+   * 隐藏字符串
+   * str 目标串
+   * head 开头显示几位
+   * tail 结尾显示几位
+   */
+  hideString: (str, head, tail) => {
+    if (!str) {
+      return '*****';
+    }
+    if (str.length < 5) {
+      return str.substr(0, 1) + '****';
+    }
+    if (head + tail >= str.length) {
+      head = tail = Math.floor(str.length / 2 - 1);
+    }
+    const midLen = str.length - head - tail;
+    let res = str.substr(0, head);
+    for (let i = 0; i < midLen; i += 1) {
+      res += '*';
+    }
+    res += str.substr(-tail, tail);
+    return res;
   },
 
   /**
@@ -154,6 +260,22 @@ const Parse = {
     while (m) {
       i = (Math.random() * m--) >>> 0;
       [arr[m], arr[i]] = [arr[i], arr[m]]
+    }
+    return arr;
+  },
+
+  /**
+   * 生成序列
+   * @param start 开始数字
+   * @param end 结束数字
+   * @param step 间隔数值
+   * @returns []
+   */
+  sequence: function (start, end, step = 1) {
+    const arr = [];
+    while (start <= end) {
+      arr.push(start);
+      start += step;
     }
     return arr;
   },

@@ -1,5 +1,5 @@
 import * as m from 'moment';
-import {I18nConfig} from "h-react";
+import {I18nConfig} from 'h-react-antd';
 
 const MomentShift = {
   "en_us": "en-us",

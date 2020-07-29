@@ -1,4 +1,4 @@
-import {Auth, I18n, Parse, Path} from 'h-react';
+import {Auth, I18n, Parse, Path} from 'h-react-antd';
 import Crypto from "./Crypto";
 import axios from "axios";
 import {message} from "antd";
