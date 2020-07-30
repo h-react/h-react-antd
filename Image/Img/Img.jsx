@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import Image from '../index';
 
 class Img extends Component {
@@ -30,4 +29,4 @@ class Img extends Component {
   }
 }
 
-export default withRouter(Img);
+export default Img;

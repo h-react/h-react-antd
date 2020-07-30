@@ -11,9 +11,7 @@ const $History = {
   pop: null,
   replace: null,
   efficacy: (action) => {
-    const back = document.querySelectorAll(".subPages >.back");
     const subs = document.querySelectorAll(".subPages >.subs > div");
-    back[0].className = subs.length <= 1 ? 'back' : 'back show';
     switch (action) {
       case 'init':
         if (subs.length === 1) {
@@ -30,7 +28,6 @@ const $History = {
       case 'pop':
         subs[subs.length - 1].className = 'leave';
         subs[subs.length - 2].className = 'face';
-        back[0].className = subs.length <= 2 ? 'back' : 'back show';
         break;
       case 'replace':
         subs[subs.length - 1].className = 'face';

@@ -1,8 +1,10 @@
 import './Initial.less';
 import React, {Component} from 'react';
-import {WechatOutlined, LeftOutlined} from '@ant-design/icons';
-import {Api, Auth, I18n, Parse, History} from "h-react-antd";
-import {message} from "antd";
+import Loadable from 'react-loadable';
+import {LeftOutlined} from '@ant-design/icons';
+import {Auth, Parse, History} from "h-react-antd";
+import Loading from "./Loading";
+import Login from "./Login";
 
 
 class Initial extends Component {
@@ -28,39 +30,38 @@ class Initial extends Component {
   }
 
   componentDidMount = () => {
-    const self = this;
     if (this.state.logging) {
       History.efficacy('init');
     }
   }
 
   renderApp = () => {
-    let ele = null;
     if (this.state.logging) {
-      ele = (
-        <div className="subPages">
-          <div className="back" onClick={() => History.pop()}><LeftOutlined/></div>
-          <div className="subs">
-            {
-              this.state.subPages.map((item, idx) => {
-                const Sub = item.component;
-                return <div key={idx}><Sub props={this.props}/></div>;
-              })
-            }
+      return (
+        <div className="container">
+          <div className="catalog">
+
+          </div>
+          <div className="exhibition">
+
+          </div>
+          <div className="subPages">
+            <div className="subs">
+              {
+                this.state.subPages.map((item, idx) => {
+                  const Sub = React.createElement((item.component !== undefined)
+                    ? Loadable({loader: item.component, loading: Loading})
+                    : item.component, this.props)
+                  return <div key={idx}>{Sub}</div>;
+                })
+              }
+            </div>
           </div>
         </div>
       );
     } else {
-      ele = (
-        <div className="waitingWechat">
-          <WechatOutlined/>
-          <div className="tips">
-            {I18n("WeChat authentication in progress")}
-          </div>
-        </div>
-      );
+      return this.props.Login || <Login/>;
     }
-    return ele;
   }
 
   render() {

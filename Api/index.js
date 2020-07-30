@@ -14,15 +14,13 @@ const Index = {
 
   /**
    * 配置host
-   * @param routerObject 路由对象
    * @param settingKey
    * @param host 链接
    * @param crypto 加密方式
    * @param append 附加参数,只支持静态数据
    */
-  config: (routerObject, settingKey = 'def', host, crypto = null, append = null) => {
+  config: (settingKey = 'def', host, crypto = null, append = null) => {
     Index.setting[settingKey] = {
-      router: routerObject,
       host: host,
       crypto: crypto,
       append: append,

@@ -79,7 +79,7 @@ const Socket = {
         });
       if (totalFinish === true) {
         if (hasNotAuth === true) {
-          if (Auth.getUserId() !== undefined) {
+          if (Auth.getLoggingId() !== undefined) {
             message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
               location.href = conf.loginUrl;
             });
@@ -136,11 +136,10 @@ const Socket = {
  */
 const Query = function (setting) {
 
-  this.router = setting.router;
   this.host = setting.host;
   this.crypto = setting.crypto;
   this.append = setting.append;
-  this.loginUrl = (this.router.name === "BrowserRouter") ? Auth.getLoginUrl() : '/#' + Auth.getLoginUrl()
+  this.loginUrl = Auth.getLoginUrl()
 
   /**
    *
@@ -187,7 +186,7 @@ const Query = function (setting) {
         }
         if (typeof response.data === 'object') {
           if (typeof response.data.code === 'number' && response.data.code === 444) {
-            if (Auth.getUserId() !== undefined) {
+            if (Auth.getLoggingId() !== undefined) {
               message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
                 Path.locationTo(this.loginUrl);
               });
