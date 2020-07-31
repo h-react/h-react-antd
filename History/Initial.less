@@ -1,8 +1,5 @@
 @charset "UTF-8";
 
-@mainColor: #108ee9;
-@animateDur: 0.4s;
-
 @keyframes iconAnimate {
   0% {
     color: #42ab42;
@@ -24,6 +21,11 @@
   .app {
     padding-bottom: 1.7rem;
   }
+}
+
+html, body, #h-container {
+  width: 100%;
+  height: 100%;
 }
 
 .app {
@@ -61,7 +63,54 @@
     height: 100%;
 
     .catalog {
+      display: flex;
+      flex-direction: column;
       height: 100%;
+      border-right: 1px solid #f0f0f0;
+
+      .ant-menu {
+        flex: 1;
+      }
+
+      .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+        border-right: 0 !important;
+      }
+
+      .catalog-switch {
+        display: flex;
+        flex-direction: row;
+        font-size: 14px;
+        z-index: 1;
+        transition: all 0.3s;
+
+        > .anticon {
+          flex: 1;
+          padding: 12px 6px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .catalog.light {
+      background: #ffffff;
+
+      .catalog-switch {
+        color: #000c17;
+        border-top: 1px solid #f0f0f0;
+
+        > .anticon:hover {
+          background: #eeeeee;
+        }
+      }
+    }
+
+    .catalog.dark {
+      background: #001529;
+
+      .catalog-switch {
+        color: #ffffff;
+        border-top: 0;
+      }
     }
 
     .exhibition {
@@ -94,7 +143,6 @@
               height: 100%;
               overflow: hidden;
               opacity: 1;
-              transition: all @animateDur;
               background: #ffffff;
               transform: scale(1, 1) translateX(100%);
               filter: grayscale(0%);
