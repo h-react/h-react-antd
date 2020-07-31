@@ -11,8 +11,8 @@ class Login extends Component {
     return (
       <div className="h-react-login">
         <div className="bg"/>
-        <div className="content-wrapper">
-          <div className="container">
+        <div className="login-box">
+          <div className="login-form">
             <h4 className="tit">{I18n('LOGIN')}</h4>
             <LoginForm/>
           </div>
