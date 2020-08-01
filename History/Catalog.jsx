@@ -2,7 +2,7 @@ import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
 import {BulbFilled, VerticalAlignTopOutlined} from '@ant-design/icons';
-import {Auth, History, LocalStorage} from 'h-react-antd';
+import {LocalStorage} from 'h-react-antd';
 
 class Catalog extends Component {
 

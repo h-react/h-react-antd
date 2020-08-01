@@ -1,4 +1,4 @@
-import {Auth, I18n, Parse, Path} from 'h-react-antd';
+import {Auth, History, I18n, Parse, Path} from 'h-react-antd';
 import Crypto from "./Crypto";
 import axios from "axios";
 import {message} from "antd";
@@ -81,7 +81,11 @@ const Socket = {
         if (hasNotAuth === true) {
           if (Auth.getLoggingId() !== undefined) {
             message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
-              location.href = conf.loginUrl;
+              Auth.clearLogging();
+              History.state.logging = false;
+              History.setState({
+                logging: false,
+              });
             });
           } else {
             message.warning(I18n('OPERATION_NOT_PERMISSION'));
@@ -139,7 +143,6 @@ const Query = function (setting) {
   this.host = setting.host;
   this.crypto = setting.crypto;
   this.append = setting.append;
-  this.loginUrl = Auth.getLoginUrl()
 
   /**
    *
@@ -188,7 +191,11 @@ const Query = function (setting) {
           if (typeof response.data.code === 'number' && response.data.code === 444) {
             if (Auth.getLoggingId() !== undefined) {
               message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
-                Path.locationTo(this.loginUrl);
+                Auth.clearLogging();
+                History.state.logging = false;
+                History.setState({
+                  logging: false,
+                });
               });
             }
             then({code: 500, msg: I18n('LIMITED_OPERATION'), data: null});
@@ -266,7 +273,7 @@ const Query = function (setting) {
     r.stack = `${Socket.stackIndex}#STACK#${apiStack}`;
     console.log(r);
     r = Parse.jsonEncode(r);
-    Socket.send({host: this.host, crypto: this.crypto, loginUrl: this.loginUrl}, r);
+    Socket.send({host: this.host, crypto: this.crypto}, r);
   };
 
 };

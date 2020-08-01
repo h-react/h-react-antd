@@ -1,11 +1,13 @@
 import './Initial.less';
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
-import {ConfigProvider} from "antd";
-import {Auth, Parse, History, I18nConfig, LocalStorage} from "h-react-antd";
+import {ConfigProvider, Button, message} from "antd";
+import {Auth, Parse, History, I18nConfig, Api, I18n, I18nContainer} from "h-react-antd";
 import Loading from "./Loading";
 import Login from "./Login";
 import Catalog from "./Catalog";
+import Guidance from "./Guidance";
+import Me from "./me";
 
 
 class Initial extends Component {
@@ -43,9 +45,25 @@ class Initial extends Component {
         <div className="container">
           <Catalog/>
           <div className="exhibition">
-            <div className="tabs">
-
+            <div className="global-operate">
+              {this.state.logging && <Button size="small" type="primary"><Me/></Button>}
+              <I18nContainer placement="top"><Button size="small">Translate</Button></I18nContainer>
+              <Button size="small" type="danger" onClick={() => {
+                Api.query().post({USER_LOGOUT: {}}, (res) => {
+                  if (res.code === 200) {
+                    message.success(I18n('LOGOUT_SUCCESS'));
+                    Auth.clearLogging();
+                    History.state.logging = false;
+                    History.setState({
+                      logging: History.state.logging,
+                    });
+                  } else {
+                    message.error(I18n(res.msg));
+                  }
+                });
+              }}>{I18n('logout')}</Button>
             </div>
+            <Guidance/>
             <div className="subPages">
               <div className="subs">
                 {
