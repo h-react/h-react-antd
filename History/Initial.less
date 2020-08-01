@@ -56,62 +56,11 @@ html, body, #h-container {
     }
   }
 
-  .container {
+  > .container {
     display: flex;
     flex-direction: row;
     width: 100%;
     height: 100%;
-
-    .catalog {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      border-right: 1px solid #f0f0f0;
-
-      .ant-menu {
-        flex: 1;
-      }
-
-      .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
-        border-right: 0 !important;
-      }
-
-      .catalog-switch {
-        display: flex;
-        flex-direction: row;
-        font-size: 14px;
-        z-index: 1;
-        transition: all 0.3s;
-
-        > .anticon {
-          flex: 1;
-          padding: 12px 6px;
-          cursor: pointer;
-        }
-      }
-    }
-
-    .catalog.light {
-      background: #ffffff;
-
-      .catalog-switch {
-        color: #000c17;
-        border-top: 1px solid #f0f0f0;
-
-        > .anticon:hover {
-          background: #eeeeee;
-        }
-      }
-    }
-
-    .catalog.dark {
-      background: #001529;
-
-      .catalog-switch {
-        color: #ffffff;
-        border-top: 0;
-      }
-    }
 
     .exhibition {
       flex: 1;
