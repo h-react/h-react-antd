@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {message, Form, Input, Button, Modal} from 'antd';
 import {UserOutlined} from '@ant-design/icons';
-import {Api, Auth, I18n} from 'h-react-antd';
+import {Api, Auth, I18n} from 'h-react-antd/index';
 
 export default (props) => {
 

@@ -2,7 +2,7 @@ import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
 import {BulbFilled, VerticalAlignTopOutlined} from '@ant-design/icons';
-import {LocalStorage} from 'h-react-antd';
+import {LocalStorage, History} from 'h-react-antd';
 
 class Catalog extends Component {
 
@@ -19,7 +19,7 @@ class Catalog extends Component {
 
 
   renderSub = (router) => {
-    router = router || this.children;
+    router = router || History.router;
     return (
       router.map((val) => {
         if (val.hide === true) {

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Button} from 'antd';
 import {TranslationOutlined} from '@ant-design/icons';
-import {I18n, I18nContainer} from 'h-react-antd';
-import LoginForm from './Login/form'
+import {I18n, I18nContainer} from 'h-react-antd/index';
+import LoginForm from './form'
 import './Login.less';
 
 class Login extends Component {
