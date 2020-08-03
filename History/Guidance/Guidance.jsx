@@ -1,8 +1,16 @@
 import './Guidance.less';
 import React, {Component} from 'react';
 import {Button, message, Tabs, Tag, Tooltip} from 'antd';
-import {PushpinOutlined, CloseOutlined} from '@ant-design/icons';
-import {Api, Auth, History, I18n, I18nContainer, LocalStorage} from "../../index";
+import {
+  PushpinOutlined,
+  CloseOutlined,
+  ArrowRightOutlined,
+  TranslationOutlined,
+  SettingOutlined,
+  FullscreenExitOutlined,
+  FullscreenOutlined,
+} from '@ant-design/icons';
+import {Api, Auth, Document, History, I18n, I18nContainer, LocalStorage, Setting} from "../../index";
 import Me from "../Me";
 
 class Guidance extends Component {
@@ -12,6 +20,7 @@ class Guidance extends Component {
 
     this.state = {
       usualPages: LocalStorage.get('h-react-usual-pages') || [],
+      fullscreen: false,
       contextMenu: null,
     }
 
@@ -142,22 +151,42 @@ class Guidance extends Component {
         <div className="top-operate">
           <div className="left">{this.renderUsual()}</div>
           <div className="right">
+            <Setting placement="right">
+              <Button size="small" icon={<SettingOutlined/>}>{I18n('SETTING')}</Button>
+            </Setting>
+            <Button
+              size="small"
+              icon={this.state.fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}
+              type={this.state.fullscreen ? 'dashed' : 'default'}
+              onClick={() => {
+                const fullscreen = !this.state.fullscreen;
+                this.setState({fullscreen: fullscreen});
+                Document.fullscreen(fullscreen);
+              }}
+            >{I18n('FULLSCREEN')}</Button>
+            <I18nContainer placement="right">
+              <Button size="small" icon={<TranslationOutlined/>}>Translate</Button>
+            </I18nContainer>
             {History.state.logging && <Button size="small" type="primary"><Me/></Button>}
-            <I18nContainer placement="right"><Button size="small">Translate</Button></I18nContainer>
-            <Button size="small" type="danger" onClick={() => {
-              Api.query().post({USER_LOGOUT: {}}, (res) => {
-                if (res.code === 200) {
-                  message.success(I18n('LOGOUT_SUCCESS'));
-                  Auth.clearLogging();
-                  History.state.logging = false;
-                  History.setState({
-                    logging: History.state.logging,
-                  });
-                } else {
-                  message.error(I18n(res.msg));
-                }
-              });
-            }}>{I18n('logout')}</Button>
+            <Button
+              icon={<ArrowRightOutlined/>}
+              size="small"
+              type="danger"
+              onClick={() => {
+                Api.query().post({USER_LOGOUT: {}}, (res) => {
+                  if (res.code === 200) {
+                    message.success(I18n('LOGOUT_SUCCESS'));
+                    Auth.clearLogging();
+                    History.state.logging = false;
+                    History.setState({
+                      logging: History.state.logging,
+                    });
+                  } else {
+                    message.error(I18n(res.msg));
+                  }
+                });
+              }}
+            >{I18n('logout')}</Button>
           </div>
         </div>
         {this.renderTabs()}

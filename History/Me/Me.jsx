@@ -74,7 +74,7 @@ export default (props) => {
   };
 
   return (
-    <div onClick={() => {
+    <span onClick={() => {
       if (visible === false) {
         form.setFieldsValue({
           password: '',
@@ -203,6 +203,6 @@ export default (props) => {
           </Form>
         }
       </Modal>
-    </div>
+    </span>
   );
 };
