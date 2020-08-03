@@ -1,8 +1,12 @@
 const Doc = {
 
+  isFullscreen: () => {
+    return document.fullScreen || document.mozFullScreen || document.webkitIsFullScreen || document.msIsFullScreen;
+  },
+
   fullscreen: (status) => {
     try {
-      if (status) {
+      if (status && !Doc.isFullscreen()) {
         let element = document.documentElement;
         if (element.requestFullscreen) {
           element.requestFullscreen();
@@ -13,7 +17,7 @@ const Doc = {
         } else if (element.msRequestFullscreen) {
           element.msRequestFullscreen();
         }
-      } else if (!status) {
+      } else if (!status && Doc.isFullscreen()) {
         if (document.exitFullscreen) {
           document.exitFullscreen();
         } else if (document.webkitCancelFullScreen) {
@@ -25,7 +29,7 @@ const Doc = {
         }
       }
     } catch (e) {
-      return false;
+      console.info(e);
     }
   }
 

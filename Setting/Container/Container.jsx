@@ -1,11 +1,9 @@
-import './Setting.less';
+import './Container.less';
 import React, {Component} from 'react';
 import {Checkbox, Row, Col, Drawer} from 'antd';
-import LocalStorage from "../Storage/LocalStorage";
-import {I18n} from "../index";
-import operate from "../../../src/pages/Setting/I18n/flagment/operate";
+import {I18n, Auth, LocalStorage, History} from "../../index";
 
-class Setting extends Component {
+class Container extends Component {
   static propTypes = {};
   static defaultProps = {};
 
@@ -14,8 +12,7 @@ class Setting extends Component {
 
     this.state = {
       showTool: false,
-      drawerPlacement: props.placement || "right",
-      setting: LocalStorage.get('h-react-setting') || {},
+      drawerPlacement: props.placement || "right"
     };
 
   };
@@ -23,20 +20,18 @@ class Setting extends Component {
   save = (e) => {
     switch (e.target.type) {
       case 'checkbox':
-        this.state.setting[e.target.name] = e.target.checked;
+        History.state.setting[e.target.name] = e.target.checked;
         break;
     }
-    this.setState({
-      setting: this.state.setting,
-    });
-    LocalStorage.set('h-react-setting', this.state.setting);
   }
 
   render() {
     return (
       <span className={`toolbar ${this.state.placement}`}>
         <span onClick={() => {
-          this.setState({showTool: true})
+          this.setState({
+            showTool: true,
+          });
         }}>
           {this.props.children}
         </span>
@@ -45,15 +40,21 @@ class Setting extends Component {
           placement={this.state.drawerPlacement}
           closable={false}
           onClose={() => {
-            this.setState({showTool: false,});
+            this.setState({
+              showTool: false,
+            });
+            History.setState({
+              setting: History.state.setting
+            });
+            LocalStorage.set('h-react-setting-' + Auth.getLoggingId(), History.state.setting);
           }}
           visible={this.state.showTool}
         >
           <Row>
             <Col span={24}>
               <Checkbox
-                defaultChecked={this.state.setting.help}
-                name="help"
+                defaultChecked={History.state.setting.enableHelp}
+                name="enableHelp"
                 onChange={this.save}
               >{I18n(['ENABLE', 'HELP', 'TIPS'])}</Checkbox>
             </Col>
@@ -64,4 +65,4 @@ class Setting extends Component {
   }
 }
 
-export default Setting;
+export default Container;

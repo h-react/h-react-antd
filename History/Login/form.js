@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {message, Form, Input, Button, Checkbox} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
-import {Api, Auth, History, I18n, Path} from 'h-react-antd/index';
+import {Api, Auth, History, I18n} from 'h-react-antd/index';
 
 export default () => {
 
@@ -48,6 +48,7 @@ export default () => {
           History.setState({
             logging: true,
           });
+          History.efficacy('init');
         }, 1000)
       } else {
         message.error(I18n(res.msg));

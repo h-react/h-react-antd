@@ -2,7 +2,6 @@ import {message} from "antd";
 import {Parse} from "../index";
 
 const $History = {
-  app: null,
   router: {},
   prefix: '',
   dispatching: false,

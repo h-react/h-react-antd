@@ -10,7 +10,17 @@ import {
   FullscreenExitOutlined,
   FullscreenOutlined,
 } from '@ant-design/icons';
-import {Api, Auth, Document, History, I18n, I18nContainer, LocalStorage, Setting} from "../../index";
+import {
+  Api,
+  Auth,
+  Document,
+  History,
+  I18n,
+  I18nContainer,
+  LocalStorage,
+  SettingContainer,
+  SettingHelp
+} from "../../index";
 import Me from "../Me";
 
 class Guidance extends Component {
@@ -24,6 +34,21 @@ class Guidance extends Component {
       contextMenu: null,
     }
 
+  }
+
+  componentDidMount() {
+    const self = this;
+    if (document.addEventListener) {
+      const fullscreenHandler = (e) => {
+        self.setState({
+          fullscreen: Document.isFullscreen()
+        });
+      }
+      document.addEventListener('webkitfullscreenchange', fullscreenHandler, false);
+      document.addEventListener('mozfullscreenchange', fullscreenHandler, false);
+      document.addEventListener('fullscreenchange', fullscreenHandler, false);
+      document.addEventListener('MSFullscreenChange', fullscreenHandler, false);
+    }
   }
 
   renderUsual = () => {
@@ -121,19 +146,22 @@ class Guidance extends Component {
           {History.state.subPages.map((sub, idx) =>
             <Tabs.TabPane
               tab={
-                <Tooltip placement="top" title={I18n('Right-click to view the menu')}>
-                   <span onContextMenu={(evt) => {
-                     evt.preventDefault();
-                     this.setState({
-                       contextMenu: {
-                         idx: idx,
-                         x: evt.pageX,
-                         y: evt.pageY,
-                         url: sub.url,
-                       }
-                     });
-                   }}>{sub.icon || null}{sub.label}</span>
-                </Tooltip>
+                <SettingHelp
+                  placement="top"
+                  title={I18n('Right-click to view the menu')}
+                >
+                  <span onContextMenu={(evt) => {
+                    evt.preventDefault();
+                    this.setState({
+                      contextMenu: {
+                        idx: idx,
+                        x: evt.pageX,
+                        y: evt.pageY,
+                        url: sub.url,
+                      }
+                    });
+                  }}>{sub.icon || null}{sub.label}</span>
+                </SettingHelp>
               }
               key={idx}
               closable={History.state.subPages.length > 0 && History.state.currentUrl !== sub.url}
@@ -151,9 +179,9 @@ class Guidance extends Component {
         <div className="top-operate">
           <div className="left">{this.renderUsual()}</div>
           <div className="right">
-            <Setting placement="right">
+            <SettingContainer placement="right">
               <Button size="small" icon={<SettingOutlined/>}>{I18n('SETTING')}</Button>
-            </Setting>
+            </SettingContainer>
             <Button
               size="small"
               icon={this.state.fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}

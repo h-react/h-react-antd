@@ -2,7 +2,7 @@ import './Initial.less';
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import {ConfigProvider} from "antd";
-import {Auth, Parse, History, I18nConfig} from "h-react-antd";
+import {Auth, Parse, History, I18nConfig, LocalStorage} from "h-react-antd";
 import Loading from "./Loading";
 import Login from "./Login";
 import Catalog from "./Catalog";
@@ -19,6 +19,7 @@ class Initial extends Component {
       logging: Auth.isLogging(),
       currentUrl: location.url,
       subPages: [],
+      setting: LocalStorage.get('h-react-setting-' + Auth.getLoggingId()) || {},
     }
 
     // 分析路由
