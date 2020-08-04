@@ -27,13 +27,14 @@ class Container extends Component {
       return null;
     }
     return (
-      <span className={`toolbar ${this.state.placement}`}>
+      <span>
         <span onClick={() => {
           this.setState({showTool: true})
         }}>
           {this.props.children}
         </span>
         <Drawer
+          className="h-react-i18n"
           title="CHOICE LANGUAGE"
           placement={this.state.drawerPlacement}
           closable={false}

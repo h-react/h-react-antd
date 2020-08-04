@@ -9,7 +9,7 @@ export default class Help extends Component {
   }
 
   render() {
-    if (History.state.setting.enableHelp === true) {
+    if (History.state.setting.enableHelpTips === true) {
       return (
         <Tooltip
           placement={this.props.placement || "top"}

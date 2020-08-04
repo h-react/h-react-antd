@@ -1,6 +1,6 @@
 import './Container.less';
 import React, {Component} from 'react';
-import {Checkbox, Row, Col, Drawer} from 'antd';
+import {Checkbox, Row, Col, Drawer, message} from 'antd';
 import {I18n, Auth, LocalStorage, History} from "../../index";
 
 class Container extends Component {
@@ -10,6 +10,7 @@ class Container extends Component {
   constructor(props) {
     super(props);
 
+    this.prev = '';
     this.state = {
       showTool: false,
       drawerPlacement: props.placement || "right"
@@ -27,8 +28,9 @@ class Container extends Component {
 
   render() {
     return (
-      <span className={`toolbar ${this.state.placement}`}>
+      <span>
         <span onClick={() => {
+          this.prev = JSON.stringify(History.state.setting);
           this.setState({
             showTool: true,
           });
@@ -36,6 +38,7 @@ class Container extends Component {
           {this.props.children}
         </span>
         <Drawer
+          className="h-react-setting"
           title={I18n('SETTING')}
           placement={this.state.drawerPlacement}
           closable={false}
@@ -43,21 +46,45 @@ class Container extends Component {
             this.setState({
               showTool: false,
             });
-            History.setState({
-              setting: History.state.setting
-            });
-            LocalStorage.set('h-react-setting-' + Auth.getLoggingId(), History.state.setting);
+            const cur = JSON.stringify(History.state.setting);
+            if (this.prev !== cur) {
+              History.setState({
+                setting: History.state.setting
+              });
+              LocalStorage.set('h-react-setting-' + Auth.getLoggingId(), History.state.setting);
+              message.loading(I18n('Setting is being processed'), 0.5);
+            }
           }}
           visible={this.state.showTool}
         >
           <Row>
-            <Col span={24}>
-              <Checkbox
-                defaultChecked={History.state.setting.enableHelp}
-                name="enableHelp"
-                onChange={this.save}
-              >{I18n(['ENABLE', 'HELP', 'TIPS'])}</Checkbox>
-            </Col>
+            <div className="setter">
+              <p>{I18n('ACCESSIBILITY')}</p>
+              <Col span={24}>
+                <Checkbox
+                  defaultChecked={History.state.setting.enableHelpTips}
+                  name="enableHelpTips"
+                  onChange={this.save}
+                >{I18n(['ENABLE', 'HELP', 'TIPS'])}</Checkbox>
+              </Col>
+            </div>
+            <div className="setter">
+              <p>{I18n('STYLE')}</p>
+              <Col span={24}>
+                <Checkbox
+                  defaultChecked={History.state.setting.enableDarkMenu}
+                  name="enableDarkMenu"
+                  onChange={this.save}
+                >{I18n(['ENABLE', 'DARK', 'MENU'])}</Checkbox>
+              </Col>
+              <Col span={24}>
+                <Checkbox
+                  defaultChecked={History.state.setting.enableSmallMenu}
+                  name="enableSmallMenu"
+                  onChange={this.save}
+                >{I18n(['ENABLE', 'SMALL', 'MENU'])}</Checkbox>
+              </Col>
+            </div>
           </Row>
         </Drawer>
       </span>
