@@ -1,7 +1,7 @@
 import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
-import {LocalStorage, History} from 'h-react-antd';
+import {History} from 'h-react-antd';
 
 class Catalog extends Component {
 
@@ -9,46 +9,62 @@ class Catalog extends Component {
     super(props);
 
     this.state = {}
+
   }
 
+  selectedKeys = () => {
+    return [
+      History.state.currentUrl,
+    ];
+  }
+
+  openKeys = (routers, keys = []) => {
+    routers = routers || History.catalog;
+    routers.forEach((val, idx) => {
+      if (typeof val.to === 'string') {
+        if (val.to === History.state.currentUrl) {
+          keys.push(val.to);
+        }
+      } else if (typeof val.to === 'object') {
+        keys.push(`catalog_${idx}`);
+        keys = this.openKeys(val.to[1], keys);
+      }
+    });
+    return keys;
+  }
 
   renderSub = (routers) => {
-    routers = routers || History.router;
-    console.log(Object.entries(routers));
+    routers = routers || History.catalog;
     return (
-      Object.entries(routers).map((router) => {
-        const url = router[0];
-        const val = router[1];
+      routers.map((val, idx) => {
         if (val.hidden === true) {
           return null;
-        } else if (val.disabled === true) {
+        }
+        if (val.disabled === true) {
           return (
-            <Menu.Item
-              key={url}
-              disabled
-            >
+            <Menu.Item key={val.to} disabled>
               {val.icon !== undefined ? val.icon : ''}<span>{val.label}</span>
             </Menu.Item>
           );
-        } else if (val.children !== undefined && val.children.length > 0) {
+        }
+        if (typeof val.to === 'string') {
+          return (
+            <Menu.Item key={val.to}>
+              {val.icon !== undefined ? val.icon : ''}<span>{History.router[val.to].label}</span>
+            </Menu.Item>
+          );
+        }
+        if (typeof val.to === 'object') {
           return (
             <Menu.SubMenu
-              key={url}
-              disabled={val.disabled}
-              title={<span>{val.icon !== undefined ? val.icon : ''}<span>{val.label}</span></span>}
+              key={`catalog_${idx}`}
+              title={<span>{val.icon !== undefined ? val.icon : ''}<span>{val.to[0]}</span></span>}
             >
-              {this.renderSub(val.children)}
+              {this.renderSub(val.to[1])}
             </Menu.SubMenu>
           );
         }
-        return (
-          <Menu.Item
-            key={url}
-            disabled={val.disabled}
-          >
-            {val.icon !== undefined ? val.icon : ''}<span>{val.label}</span>
-          </Menu.Item>
-        );
+        return null;
       })
     );
   };
@@ -60,11 +76,14 @@ class Catalog extends Component {
     return (
       <div className={`catalog ${theme}`}>
         <Menu
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
+          defaultSelectedKeys={this.selectedKeys()}
+          defaultOpenKeys={this.openKeys()}
           mode="inline"
           theme={theme}
           inlineCollapsed={History.state.setting.enableSmallMenu}
+          onClick={(e) => {
+            History.push(e.key);
+          }}
         >
           {this.renderSub()}
         </Menu>

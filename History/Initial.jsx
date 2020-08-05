@@ -1,8 +1,9 @@
 import './Initial.less';
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
+import Loadable from "react-loadable";
 import {ConfigProvider} from "antd";
 import {Auth, Parse, History, I18nConfig, LocalStorage} from "h-react-antd";
+
 import Loading from "./Loading";
 import Login from "./Login";
 import Catalog from "./Catalog";
@@ -19,6 +20,7 @@ class Initial extends Component {
       logging: Auth.isLogging(),
       currentUrl: location.url,
       subPages: [],
+      tabsActiveKey: '0',
       setting: LocalStorage.get('h-react-setting-' + Auth.getLoggingId()) || {},
     }
 
@@ -32,12 +34,6 @@ class Initial extends Component {
     History.link(this);
   }
 
-  componentDidMount = () => {
-    if (this.state.logging) {
-      History.efficacy('init');
-    }
-  }
-
   renderApp = () => {
     if (this.state.logging) {
       return (
@@ -49,10 +45,8 @@ class Initial extends Component {
               <div className="subs">
                 {
                   this.state.subPages.map((item, idx) => {
-                    const Sub = React.createElement((item.component !== undefined)
-                      ? Loadable({loader: item.component, loading: Loading})
-                      : item.component, this.props)
-                    return <div key={idx}>{Sub}</div>;
+                    const Sub = item.component;
+                    return <div key={idx}><Sub/></div>;
                   })
                 }
               </div>

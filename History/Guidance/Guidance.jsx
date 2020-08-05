@@ -1,6 +1,6 @@
 import './Guidance.less';
 import React, {Component} from 'react';
-import {Button, message, Tabs, Tag, Tooltip} from 'antd';
+import {Button, message, Tabs, Tag} from 'antd';
 import {
   PushpinOutlined,
   CloseOutlined,
@@ -53,7 +53,7 @@ class Guidance extends Component {
 
   renderUsual = () => {
     return (
-      <div>
+      <div className="usual">
         {
           this.state.usualPages.map((mk, idx) => {
             const opt = JSON.parse(mk);
@@ -64,6 +64,7 @@ class Guidance extends Component {
                 icon={<PushpinOutlined/>}
                 color={History.state.currentUrl === opt.url ? "processing" : "default"}
                 onClick={() => {
+                  History.push(opt.url);
                 }}
                 onClose={(e) => {
                   e.preventDefault();
@@ -117,11 +118,26 @@ class Guidance extends Component {
         <Button
           block danger
           type="text"
-          disabled={
-            History.state.subPages.length <= 0
-            || History.state.currentUrl === History.state.subPages[this.state.contextMenu.idx].url
-          }
+          disabled={History.state.subPages.length < 2}
           onClick={() => {
+            let next = 0;
+            const targetKey = this.state.contextMenu.idx;
+            if (targetKey === History.state.tabsActiveKey) {
+              if (targetKey === 0) {
+                next = 0;
+              } else {
+                next = targetKey - 1;
+              }
+            } else if (targetKey > History.state.tabsActiveKey) {
+              next = targetKey - 1;
+            }
+            History.remove(targetKey, next);
+            History.setState({
+              tabsActiveKey: '' + next,
+            });
+            this.setState({
+              contextMenu: null,
+            });
           }}
         >
           <CloseOutlined/>关闭标签
@@ -138,18 +154,37 @@ class Guidance extends Component {
           hideAdd={true}
           size="default"
           tabPosition="top"
+          activeKey={History.state.tabsActiveKey}
           onChange={(activeKey) => {
-            const tag = History.state.subPages[activeKey];
-            History.replace(tag.url);
+            History.change(activeKey);
+          }}
+          onEdit={(targetKey, action) => {
+            if (action === 'remove') {
+              let next = Number.parseInt(History.state.tabsActiveKey) - 1;
+              if (targetKey === History.state.tabsActiveKey) {
+                if (targetKey === '0') {
+                  next = 0;
+                } else {
+                  next = Number.parseInt(targetKey) - 1;
+                }
+              } else if (targetKey > History.state.tabsActiveKey) {
+                next = Number.parseInt(targetKey) - 1;
+              }
+              History.remove(targetKey, next);
+              History.setState({
+                tabsActiveKey: '' + next,
+              });
+            }
           }}
         >
-          {History.state.subPages.map((sub, idx) =>
-            <Tabs.TabPane
-              tab={
-                <SettingHelp
-                  placement="top"
-                  title={I18n('Right-click to view the menu')}
-                >
+          {
+            History.state.subPages.map((sub, idx) => {
+              return <Tabs.TabPane
+                tab={
+                  <SettingHelp
+                    placement="top"
+                    title={I18n('Right-click to view the menu')}
+                  >
                   <span onContextMenu={(evt) => {
                     evt.preventDefault();
                     this.setState({
@@ -161,12 +196,13 @@ class Guidance extends Component {
                       }
                     });
                   }}>{sub.icon || null}{sub.label}</span>
-                </SettingHelp>
-              }
-              key={idx}
-              closable={History.state.subPages.length > 0 && History.state.currentUrl !== sub.url}
-            />)
-          })}
+                  </SettingHelp>
+                }
+                key={idx}
+                closable={History.state.subPages.length > 1}
+              />
+            })
+          }
         </Tabs>
         {this.renderContextMenu()}
       </div>

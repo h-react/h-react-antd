@@ -280,6 +280,25 @@ const Parse = {
     return arr;
   },
 
+  objGet: (obj, key, sep = '.', callValue) => {
+    const kArr = key.split(sep);
+    let tar = obj;
+    let res = null;
+    for (const k in kArr) {
+      if (tar[kArr[k]] === undefined) {
+        res = null;
+        break;
+      } else {
+        res = tar[kArr[k]];
+        tar = tar[kArr[k]];
+      }
+    }
+    if (res === null && typeof callValue === 'function') {
+      res = callValue();
+    }
+    return res;
+  }
+
 };
 
 export default Parse;

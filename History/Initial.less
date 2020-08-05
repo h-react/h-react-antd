@@ -1,26 +1,21 @@
 @charset "UTF-8";
 
-@keyframes iconAnimate {
-  0% {
-    color: #42ab42;
-    text-shadow: 10px 10px #42ab42;
-  }
-  50% {
-    color: #888888;
-    text-shadow: 1px 1px #888888;
-    transition: all 0.5s;
-  }
-  100% {
-    color: #42ab42;
-    text-shadow: 10px 10px #42ab42;
-  }
+div::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
 }
 
-/* iPhoneX之后的适配 */
-@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
-  .app {
-    padding-bottom: 1.7rem;
-  }
+div::-webkit-scrollbar-track {
+  width: 50px;
+  background: #f0f0f0;
+}
+
+div::-webkit-scrollbar-thumb {
+  background: #dddddd;
+}
+
+div::-webkit-scrollbar-thumb:hover {
+  background: #cccccc;
 }
 
 html, body, #h-container {
@@ -91,39 +86,16 @@ html, body, #h-container {
             position: absolute;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            opacity: 1;
-            background: #ffffff;
-            transform: scale(1, 1) translateX(100%);
-            filter: grayscale(0%);
+            overflow-x: hidden;
+            overflow-y: auto;
           }
 
-          > div.diving {
-            z-index: 6;
-            transform: scale(0.8, 0.8) translateX(-116%);
-            filter: grayscale(100%);
+          > div.hide {
+            display: none;
           }
 
-          > div.first {
-            z-index: 7;
-            opacity: 1;
-            transition: all 0s;
-            transform: translateX(0);
-            filter: grayscale(0%);
-          }
-
-          > div.face {
-            z-index: 8;
-            opacity: 1;
-            transform: scale(1, 1) translateX(0);
-            filter: grayscale(0%);
-          }
-
-          > div.leave {
-            z-index: 9;
-            opacity: 1;
-            transform: translateX(100%);
-            filter: grayscale(0%);
+          > div.show {
+            display: flex;
           }
 
         }

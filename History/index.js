@@ -1,35 +1,30 @@
 import {message} from "antd";
-import {Parse} from "../index";
+import {History, Parse} from "../index";
 
 const $History = {
   router: {},
+  catalog: [],
   prefix: '',
   dispatching: false,
   dispatch: null,
-  push: null,
-  pop: null,
-  replace: null,
-  efficacy: (action) => {
+  efficacy: (action, idx = 0) => {
+    idx = Number.parseInt(idx, 10);
     const subs = document.querySelectorAll(".subPages >.subs > div");
     switch (action) {
       case 'init':
-        if (subs.length === 1) {
-          subs[subs.length - 1].className = 'first';
-        } else if (subs.length === 2) {
-          subs[subs.length - 2].className = 'diving';
-          subs[subs.length - 1].className = 'first';
-        }
+        subs[subs.length - 1].className = 'show';
         break;
       case 'push':
-        subs[subs.length - 2].className = 'diving';
-        subs[subs.length - 1].className = 'face';
+        for (let i = 0; i < subs.length - 1; i++) {
+          subs[i].className = 'hide';
+        }
+        subs[subs.length - 1].className = 'show';
         break;
-      case 'pop':
-        subs[subs.length - 1].className = 'leave';
-        subs[subs.length - 2].className = 'face';
-        break;
-      case 'replace':
-        subs[subs.length - 1].className = 'face';
+      case 'remove':
+      case 'change':
+        for (let i = 0; i < subs.length; i++) {
+          subs[i].className = (i === idx) ? 'show' : 'hide';
+        }
         break;
     }
   },
@@ -37,25 +32,13 @@ const $History = {
     $History.app = $this;
     $History.state = $this.state;
     $History.setState = (data) => {
-      $History.app.setState(data);
+      for (let i in data) {
+        $History.state[i] = data[i];
+      }
+      $History.app.setState($History.state);
     };
     $History.getState = (key, callValue) => {
-      const kArr = key.split('.');
-      let tar = $History.state;
-      let res = null;
-      for (const k in kArr) {
-        if (tar[kArr[k]] === undefined) {
-          res = null;
-          break;
-        } else {
-          res = tar[kArr[k]];
-          tar = tar[kArr[k]];
-        }
-      }
-      if (res === null && typeof callValue === 'function') {
-        res = callValue();
-      }
-      return res;
+      return Parse.objGet($History.state, key, '.', callValue);
     }
     $History.dispatch = (status) => {
       if (status === undefined) {
@@ -66,7 +49,7 @@ const $History = {
         const t = setTimeout(() => {
           window.clearTimeout(t);
           $History.dispatching = false;
-        }, 600)
+        }, 200)
       }
     }
     $History.push = (url) => {
@@ -74,9 +57,11 @@ const $History = {
         $History.dispatch(true);
         const location = Parse.urlDispatch(url);
         if ($History.router[location.pathname]) {
-          $this.state.subPages.push({url: location.url, ...$History.router[location.pathname]});
-          $this.setState({
-            subPages: $this.state.subPages,
+          $History.state.subPages.push({url: location.url, ...$History.router[location.pathname]});
+          $History.setState({
+            subPages: $History.state.subPages,
+            tabsActiveKey: '' + ($History.state.subPages.length - 1),
+            currentUrl: location.url,
           });
           window.history.replaceState(null, null, $History.prefix + location.url);
           const t = setTimeout(() => {
@@ -84,45 +69,35 @@ const $History = {
             $History.efficacy('push');
           }, 50)
         } else {
-          message.error('History push fail!');
+          message.error('History push fail:' + url);
         }
       }
     }
-    $History.pop = () => {
+    $History.remove = (idx, next) => {
       if (!$History.dispatch()) {
-        if ($this.state.subPages.length <= 1) {
-          window.history.replaceState(null, null, $History.prefix + '/');
+        if ($this.state.subPages.length < 2) {
           return;
         }
         $History.dispatch(true);
-        $History.efficacy('pop');
-        window.history.replaceState(null, null, $History.prefix + $this.state.subPages[$this.state.subPages.length - 2].url);
-        const t = setTimeout(() => {
-          window.clearTimeout(t);
-          $this.state.subPages.pop();
-          $this.setState({
-            subPages: $this.state.subPages,
-          })
-        }, 430)
+        $History.state.subPages.splice(idx, 1);
+        $History.setState({
+          subPages: $this.state.subPages,
+          tabsActiveKey: '' + next,
+          currentUrl: $History.state.subPages[next].url,
+        });
+        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[next].url);
+        $History.efficacy('remove', next);
       }
     }
-    $History.replace = (url) => {
+    $History.change = (idx) => {
       if (!$History.dispatch()) {
         $History.dispatch(true);
-        if ($History.router[url]) {
-          $this.state.subPages.pop();
-          $this.state.subPages.push({url: url, ...$History.router[url]});
-          $this.setState({
-            subPages: $this.state.subPages,
-          });
-          window.history.replaceState(null, null, $History.prefix + url);
-          const t = setTimeout(() => {
-            window.clearTimeout(t);
-            $History.efficacy('replace');
-          }, 0)
-        } else {
-          message.error('History replace fail!');
-        }
+        $History.efficacy('change', idx);
+        $History.setState({
+          tabsActiveKey: '' + idx,
+          currentUrl: $this.state.subPages[idx].url,
+        });
+        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx].url);
       }
     }
   }
