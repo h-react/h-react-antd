@@ -26,7 +26,7 @@ const Index = (trans, lang = null) => {
     }
     let l = History.state.i18n.data[lang][t];
     if (!l) {
-      rl.push(`{I18N${t}}`);
+      rl.push(t);
     } else {
       if (!isChinese) {
         if (idx === 0) {

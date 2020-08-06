@@ -12,12 +12,11 @@ import {
 } from '@ant-design/icons';
 import {
   Api,
-  Auth,
   Document,
   History,
   I18n,
   I18nContainer,
-  LocalStorage,
+  LocalStorage, Parse,
   SettingContainer,
   SettingHelp
 } from "../../index";
@@ -56,16 +55,20 @@ class Guidance extends Component {
     return (
       <div className="usual">
         {
-          this.state.usualPages.map((mk, idx) => {
-            const opt = JSON.parse(mk);
+          this.state.usualPages.map((url, idx) => {
+            const location = Parse.urlDispatch(url);
+            const router = History.state.router[location.pathname];
+            if (!router) {
+              return null;
+            }
             return (
               <Tag
                 key={idx}
                 closable
                 icon={<PushpinOutlined/>}
-                color={History.state.currentUrl === opt.url ? "processing" : "default"}
+                color={History.state.currentUrl === url ? "processing" : "default"}
                 onClick={() => {
-                  History.push(opt.url);
+                  History.push(url);
                 }}
                 onClose={(e) => {
                   e.preventDefault();
@@ -75,7 +78,8 @@ class Guidance extends Component {
                   });
                   LocalStorage.set('h-react-usual-pages', this.state.usualPages);
                 }}>
-                {opt.label}
+
+                {I18n(router.label)}
               </Tag>
             );
           })
@@ -88,10 +92,6 @@ class Guidance extends Component {
     if (this.state.contextMenu === null) {
       return null;
     }
-    const mk = JSON.stringify({
-      label: History.state.subPages[this.state.contextMenu.idx].label,
-      url: History.state.subPages[this.state.contextMenu.idx].url,
-    });
     return (
       <div
         className="right-cm"
@@ -105,16 +105,16 @@ class Guidance extends Component {
         <Button
           block
           type="text"
-          disabled={this.state.usualPages.includes(mk)}
+          disabled={this.state.usualPages.includes(this.state.contextMenu.url)}
           onClick={() => {
-            this.state.usualPages.push(mk);
+            this.state.usualPages.push(this.state.contextMenu.url);
             this.setState({
               usualPages: this.state.usualPages,
               contextMenu: null,
             });
             LocalStorage.set('h-react-usual-pages', this.state.usualPages);
           }}>
-          <PushpinOutlined/>设为常用
+          <PushpinOutlined/>加入常用
         </Button>
         <Button
           block danger
@@ -141,7 +141,7 @@ class Guidance extends Component {
             });
           }}
         >
-          <CloseOutlined/>关闭标签
+          <CloseOutlined/>{I18n(['CLOSE', 'TAB'])}
         </Button>
       </div>
     );
@@ -179,7 +179,9 @@ class Guidance extends Component {
           }}
         >
           {
-            History.state.subPages.map((sub, idx) => {
+            History.state.subPages.map((url, idx) => {
+              const location = Parse.urlDispatch(url);
+              const router = History.state.router[location.pathname];
               return <Tabs.TabPane
                 tab={
                   <SettingHelp
@@ -193,10 +195,10 @@ class Guidance extends Component {
                         idx: idx,
                         x: evt.pageX,
                         y: evt.pageY,
-                        url: sub.url,
+                        url: url,
                       }
                     });
-                  }}>{sub.icon || null}{sub.label}</span>
+                  }}>{router.icon || null}{I18n(router.label)}</span>
                   </SettingHelp>
                 }
                 key={idx}

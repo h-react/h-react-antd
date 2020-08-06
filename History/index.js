@@ -1,12 +1,27 @@
 import {message} from "antd";
 import {Parse} from "../index";
 
+const AntdLangs = {
+  "en_us": "en_US",
+  "ja_jp": "ja_JP",
+  "ko_kr": "ko_KR",
+  "zh_cn": "zh_CN",
+  "zh_hk": "zh_TW",
+  "zh_tw": "zh_TW"
+};
+
 const $History = {
-  router: {},
-  catalog: [],
   prefix: '',
   dispatching: false,
   dispatch: null,
+  i18nAntd: () => {
+    let l = AntdLangs[$History.state.i18n.lang];
+    if (l === undefined) {
+      l = AntdLangs.en_us
+    }
+    const obj = require(`antd/es/locale/${l}.js`);
+    return obj.default;
+  },
   efficacy: (action, idx = 0) => {
     idx = Number.parseInt(idx, 10);
     const subs = document.querySelectorAll(".subPages >.subs > div");
@@ -56,8 +71,8 @@ const $History = {
       if (!$History.dispatch()) {
         $History.dispatch(true);
         const location = Parse.urlDispatch(url);
-        if ($History.router[location.pathname]) {
-          $History.state.subPages.push({url: location.url, ...$History.router[location.pathname]});
+        if ($History.state.router[location.pathname]) {
+          $History.state.subPages.push(location.url);
           $History.setState({
             subPages: $History.state.subPages,
             tabsActiveKey: '' + ($History.state.subPages.length - 1),
@@ -83,9 +98,9 @@ const $History = {
         $History.setState({
           subPages: $this.state.subPages,
           tabsActiveKey: '' + next,
-          currentUrl: $History.state.subPages[next].url,
+          currentUrl: $History.state.subPages[next],
         });
-        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[next].url);
+        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[next]);
         $History.efficacy('remove', next);
       }
     }
@@ -95,9 +110,9 @@ const $History = {
         $History.efficacy('change', idx);
         $History.setState({
           tabsActiveKey: '' + idx,
-          currentUrl: $this.state.subPages[idx].url,
+          currentUrl: $this.state.subPages[idx],
         });
-        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx].url);
+        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx]);
       }
     }
   },

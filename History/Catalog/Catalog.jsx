@@ -1,7 +1,7 @@
 import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
-import {History} from 'h-react-antd';
+import {History, I18n} from 'h-react-antd';
 
 class Catalog extends Component {
 
@@ -19,7 +19,7 @@ class Catalog extends Component {
   }
 
   openKeys = (routers, keys = []) => {
-    routers = routers || History.catalog;
+    routers = routers || History.state.catalog;
     routers.forEach((val, idx) => {
       if (typeof val.to === 'string') {
         if (val.to === History.state.currentUrl) {
@@ -33,24 +33,24 @@ class Catalog extends Component {
     return keys;
   }
 
-  renderSub = (routers) => {
-    routers = routers || History.catalog;
+  renderSub = (catalog) => {
+    catalog = catalog || History.state.catalog;
     return (
-      routers.map((val, idx) => {
+      catalog.map((val, idx) => {
         if (val.hidden === true) {
           return null;
         }
         if (val.disabled === true) {
           return (
             <Menu.Item key={val.to} disabled>
-              {val.icon !== undefined ? val.icon : ''}<span>{val.label}</span>
+              {val.icon !== undefined ? val.icon : ''}<span>{I18n(val.label)}</span>
             </Menu.Item>
           );
         }
         if (typeof val.to === 'string') {
           return (
             <Menu.Item key={val.to}>
-              {val.icon !== undefined ? val.icon : ''}<span>{History.router[val.to].label}</span>
+              {val.icon !== undefined ? val.icon : ''}<span>{I18n(History.state.router[val.to].label)}</span>
             </Menu.Item>
           );
         }
@@ -58,7 +58,7 @@ class Catalog extends Component {
           return (
             <Menu.SubMenu
               key={`catalog_${idx}`}
-              title={<span>{val.icon !== undefined ? val.icon : ''}<span>{val.to[0]}</span></span>}
+              title={<span>{val.icon !== undefined ? val.icon : ''}<span>{I18n(val.to[0])}</span></span>}
             >
               {this.renderSub(val.to[1])}
             </Menu.SubMenu>

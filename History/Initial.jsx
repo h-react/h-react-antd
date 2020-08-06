@@ -2,44 +2,31 @@ import './Initial.less';
 import React, {Component} from 'react';
 import {ConfigProvider, Spin} from "antd";
 import {Api, Parse, History, LocalStorage} from "h-react-antd";
+import {LoadingOutlined} from "@ant-design/icons";
 
 import Login from "./Login";
 import Catalog from "./Catalog";
 import Guidance from "./Guidance";
 
-const AntdLangs = {
-  "en_us": "en_US",
-  "ja_jp": "ja_JP",
-  "ko_kr": "ko_KR",
-  "zh_cn": "zh_CN",
-  "zh_hk": "zh_TW",
-  "zh_tw": "zh_TW"
-};
-
 class Initial extends Component {
   constructor(props) {
     super(props);
 
-    const location = Parse.urlDispatch();
+    this.location = Parse.urlDispatch();
 
     this.state = {
       ...props.data,
       loggingId: LocalStorage.get('h-react-logging-id') || null,
-      currentUrl: location.url,
+      currentUrl: this.location.url,
       subPages: [],
       tabsActiveKey: '0',
       i18n: {},
+      router: {},
+      catalog: [],
     }
 
     // setting
     this.state.setting = LocalStorage.get('h-react-setting-' + this.state.loggingId) || {};
-
-    // 分析路由
-    if (History.router[location.pathname]) {
-      this.state.subPages.push({url: location.url, ...History.router[location.pathname]});
-    } else {
-      this.state.subPages.push({url: '/', ...History.router['/']});
-    }
 
     // 绑定
     History.link(this);
@@ -55,7 +42,6 @@ class Initial extends Component {
       this.state.i18n.support = props.support || ['zh_cn', 'zh_tw', 'zh_hk', 'en_us', 'ja_jp', 'ko_kr'];
       if (props.i18n.data && props.i18n.data.length > 0) {
         this.state.i18n.data = this.i18nDataFormat(props.i18n.data, this.state.i18n.support);
-        if (props.router) History.router = props.router;
       } else {
         this.state.i18n.data = [];
       }
@@ -64,6 +50,26 @@ class Initial extends Component {
       this.state.i18n.support = ['zh_cn', 'zh_tw', 'zh_hk', 'en_us', 'ja_jp', 'ko_kr'];
       this.state.i18n.data = [];
     }
+  }
+
+  _init = () => {
+    if (this.props.menu) {
+      const menu = this.props.menu.get();
+      History.state.router = menu.router;
+      History.state.catalog = menu.catalog;
+      History.setState({
+        router: menu.router,
+        catalog: menu.catalog,
+      });
+    }
+    if (this.state.router[this.location.pathname]) {
+      this.state.subPages.push(this.location.url);
+    } else {
+      this.state.subPages.push('/');
+    }
+    this.setState({
+      subPages: this.state.subPages,
+    });
   }
 
   componentDidMount() {
@@ -75,8 +81,11 @@ class Initial extends Component {
           self.setState({
             i18n: self.state.i18n,
           });
+          self._init();
         }
       });
+    } else {
+      this._init();
     }
   }
 
@@ -104,7 +113,7 @@ class Initial extends Component {
     if (!this.isInitial()) {
       return (
         <div style={{textAlign: 'center', width: '100%', height: '100vh', lineHeight: '100vh'}}>
-          <Spin tip="loading" size="large"/>
+          <Spin indicator={<LoadingOutlined style={{fontSize: 50}} spin/>}/>
         </div>
       );
     }
@@ -117,8 +126,9 @@ class Initial extends Component {
             <div className="subPages">
               <div className="subs">
                 {
-                  this.state.subPages.map((item, idx) => {
-                    const Sub = item.component;
+                  this.state.subPages.map((url, idx) => {
+                    const location = Parse.urlDispatch(url);
+                    const Sub = this.state.router[location.pathname].component;
                     return <div key={idx}><Sub/></div>;
                   })
                 }
@@ -132,18 +142,9 @@ class Initial extends Component {
     }
   }
 
-  i18nAntd = () => {
-    let l = AntdLangs[this.state.i18n.lang];
-    if (l === undefined) {
-      l = AntdLangs.en_us
-    }
-    const obj = require(`antd/es/locale/${l}.js`);
-    return obj.default;
-  }
-
   render() {
     return (
-      <ConfigProvider locale={this.i18nAntd()}>
+      <ConfigProvider locale={History.i18nAntd()}>
         <div className="app">
           {this.renderApp()}
         </div>

@@ -40,19 +40,11 @@ export default () => {
         message.success(I18n('LOGIN_SUCCESS'));
         setFormData({...formData, loginStatus: 'ok'});
         if (values.remember === true) {
-          LocalStorage.set('l_rem', values.remember ? 1 : 0)
-          LocalStorage.set('l_acc', values.account)
+          LocalStorage.set('l_rem', values.remember ? 1 : 0);
+          LocalStorage.set('l_acc', values.account);
         }
-        History.setState({
-          loggingId: res.data.user_id,
-        });
-        const t1 = setTimeout(() => {
-          window.clearTimeout(t1);
-          History.setState({
-            logging: true,
-          });
-          History.efficacy('init');
-        }, 1000)
+        LocalStorage.set('h-react-logging-id', res.data.user_id);
+        History.setState({loggingId: res.data.user_id});
       } else {
         message.error(I18n(res.msg));
         setTimeout(() => {
