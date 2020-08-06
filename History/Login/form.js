@@ -2,13 +2,14 @@ import React, {useState} from "react";
 import {message, Form, Input, Button, Checkbox} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
 import {Api, Auth, History, I18n} from 'h-react-antd/index';
+import LocalStorage from "../../Storage/LocalStorage";
 
 export default () => {
 
   const [formData, setFormData] = useState({
-    account: Auth.getAccount(),
+    account: LocalStorage.get('l_acc'),
     password: undefined,
-    remember: Auth.getRemember(),
+    remember: LocalStorage.get('l_rem') === 1,
     loginStatus: 'free',
   });
 
@@ -39,10 +40,12 @@ export default () => {
         message.success(I18n('LOGIN_SUCCESS'));
         setFormData({...formData, loginStatus: 'ok'});
         if (values.remember === true) {
-          Auth.setRemember(values.remember ? 1 : 0);
-          Auth.setAccount(values.account);
+          LocalStorage.set('l_rem', values.remember ? 1 : 0)
+          LocalStorage.set('l_acc', val)
         }
-        Auth.setLoggingId(res.data.user_id);
+        History.setState({
+          loggingId: res.data.user_id,
+        });
         const t1 = setTimeout(() => {
           window.clearTimeout(t1);
           History.setState({

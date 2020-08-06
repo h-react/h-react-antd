@@ -1,5 +1,5 @@
 import {message} from "antd";
-import {History, Parse} from "../index";
+import {Parse} from "../index";
 
 const $History = {
   router: {},
@@ -100,7 +100,7 @@ const $History = {
         window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx].url);
       }
     }
-  }
+  },
 }
 
 

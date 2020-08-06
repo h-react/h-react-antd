@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {Radio, Drawer} from 'antd';
-import I18nConfig from '../Config';
-import LocalStorage from "../../Storage/LocalStorage";
+import {LocalStorage, History} from "../../index";
 
 import './Container.less';
 
@@ -14,16 +13,14 @@ class Container extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      defaultLang: LocalStorage.get('i18nDefaultLang') || I18nConfig.defaultLang,
+      lang: History.state.i18n.lang,
       showTool: false,
       drawerPlacement: props.placement || "right",
     };
-    this.originLang = this.state.defaultLang;
-    this.changed = false;
   };
 
   render() {
-    if (I18nConfig.support.length <= 0) {
+    if (History.state.i18n.support.length <= 0) {
       return null;
     }
     return (
@@ -42,22 +39,28 @@ class Container extends Component {
             this.setState({
               showTool: false,
             });
-            if (this.changed && this.originLang !== LocalStorage.get('i18nDefaultLang')) {
-              location.reload();
+            if (this.state.lang !== History.state.i18n.lang) {
+              History.state.i18n.lang = this.state.lang;
+              History.setState({
+                i18n: History.state.i18n,
+              });
+              LocalStorage.set('h-react-i18n-lang', this.state.lang);
             }
           }}
           visible={this.state.showTool}
         >
           <Radio.Group
-            defaultValue={this.state.defaultLang}
+            defaultValue={this.state.lang}
             onChange={(evt) => {
-              LocalStorage.set('i18nDefaultLang', evt.target.value)
-              this.changed = true;
+              this.state.lang = evt.target.value;
+              this.setState({
+                lang: this.state.lang,
+              })
             }}
           >
             {
               Object.entries(langJson).map((val, key) => {
-                if (I18nConfig.support.includes(val[0])) {
+                if (History.state.i18n.support.includes(val[0])) {
                   return <Radio className="radioStyle" key={key} value={val[0]}>{val[1]}</Radio>;
                 }
               })

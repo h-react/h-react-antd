@@ -12,24 +12,22 @@ export default (props) => {
   const [querying, setQuerying] = useState(false);
 
   const getData = () => {
-    if (Auth.isLogging()) {
-      Api.query().post({
-        ADMIN_USER_INFO: {},
-        USER_META_CATEGORY: {},
-        MAPPING: {
-          method: "antd",
-          keys: [
-            "Yonna_QuickStart_Mapping_User_Sex",
-          ]
-        }
-      }, (res) => {
-        if (res.code === 200) {
-          setUserInfo(res.data.ADMIN_USER_INFO);
-        } else {
-          message.error(res.msg);
-        }
-      })
-    }
+    Api.query().post({
+      ADMIN_USER_INFO: {},
+      USER_META_CATEGORY: {},
+      MAPPING: {
+        method: "antd",
+        keys: [
+          "Yonna_QuickStart_Mapping_User_Sex",
+        ]
+      }
+    }, (res) => {
+      if (res.code === 200) {
+        setUserInfo(res.data.ADMIN_USER_INFO);
+      } else {
+        message.error(res.msg);
+      }
+    })
   };
 
   useEffect(() => {

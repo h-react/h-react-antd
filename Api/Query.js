@@ -1,8 +1,19 @@
-import {Auth, History, I18n, Parse, Path} from 'h-react-antd';
+import {History, I18n, Parse} from 'h-react-antd';
 import Crypto from "./Crypto";
 import axios from "axios";
+import nanoid from "nanoid";
 import {message} from "antd";
+import LocalStorage from "../Storage/LocalStorage";
 
+/**
+ * 获取客户端ID
+ */
+const clientId = () => {
+  if (LocalStorage.get('cid') === null) {
+    LocalStorage.set('cid', nanoid(42) + (new Date()).getTime().toString(36));
+  }
+  return LocalStorage.get('cid');
+}
 
 const ApiSocket = { /* host: obj */};
 const Socket = {
@@ -79,12 +90,10 @@ const Socket = {
         });
       if (totalFinish === true) {
         if (hasNotAuth === true) {
-          if (Auth.getLoggingId() !== undefined) {
+          if (History.state.loggingId !== null) {
             message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
-              Auth.clearLogging();
-              History.state.logging = false;
               History.setState({
-                logging: false,
+                loggingId: null,
               });
             });
           } else {
@@ -178,7 +187,7 @@ const Query = function (setting) {
       method: 'post',
       url: this.host,
       data: Crypto.encode({
-        client_id: Auth.getClientId(),
+        client_id: clientId(),
         scopes: params
       }, this.crypto),
       config: {}
@@ -191,10 +200,8 @@ const Query = function (setting) {
           if (typeof response.data.code === 'number' && response.data.code === 444) {
             if (Auth.getLoggingId() !== undefined) {
               message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
-                Auth.clearLogging();
-                History.state.logging = false;
                 History.setState({
-                  logging: false,
+                  loggingId: null,
                 });
               });
             }

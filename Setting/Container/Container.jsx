@@ -51,7 +51,7 @@ class Container extends Component {
               History.setState({
                 setting: History.state.setting
               });
-              LocalStorage.set('h-react-setting-' + Auth.getLoggingId(), History.state.setting);
+              LocalStorage.set('h-react-setting-' + History.state.loggingId, History.state.setting);
               message.loading(I18n('Setting is being processed'), 0.5);
             }
           }}

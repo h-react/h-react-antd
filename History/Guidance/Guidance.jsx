@@ -22,6 +22,7 @@ import {
   SettingHelp
 } from "../../index";
 import Me from "../Me";
+import Help from "../../Setting/Help";
 
 class Guidance extends Component {
 
@@ -231,26 +232,31 @@ class Guidance extends Component {
             <I18nContainer placement="right">
               <Button size="small" icon={<TranslationOutlined/>}>Translate</Button>
             </I18nContainer>
-            {History.state.logging && <Button size="small" type="primary"><Me/></Button>}
-            <Button
-              icon={<ArrowRightOutlined/>}
-              size="small"
-              type="danger"
-              onClick={() => {
-                Api.query().post({USER_LOGOUT: {}}, (res) => {
-                  if (res.code === 200) {
-                    message.success(I18n('LOGOUT_SUCCESS'));
-                    Auth.clearLogging();
-                    History.state.logging = false;
-                    History.setState({
-                      logging: History.state.logging,
-                    });
-                  } else {
-                    message.error(I18n(res.msg));
-                  }
-                });
-              }}
-            >{I18n('logout')}</Button>
+            {
+              History.state.loggingId !== null &&
+              <Help title={I18n('Click to modify personal information')}>
+                <Button size="small" type="primary"><Me/></Button>
+              </Help>
+            }
+            <Help title={I18n(['LOGOUT', 'LOGIN'])}>
+              <Button
+                icon={<ArrowRightOutlined/>}
+                size="small"
+                type="danger"
+                onClick={() => {
+                  Api.query().post({USER_LOGOUT: {}}, (res) => {
+                    if (res.code === 200) {
+                      message.success(I18n('LOGOUT_SUCCESS'));
+                      History.setState({
+                        loggingId: null,
+                      });
+                    } else {
+                      message.error(I18n(res.msg));
+                    }
+                  });
+                }}
+              >{I18n('logout')}</Button>
+            </Help>
           </div>
         </div>
         {this.renderTabs()}
