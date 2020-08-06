@@ -198,7 +198,7 @@ const Query = function (setting) {
         }
         if (typeof response.data === 'object') {
           if (typeof response.data.code === 'number' && response.data.code === 444) {
-            if (Auth.getLoggingId() !== undefined) {
+            if (History.state.loggingId !== null) {
               message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
                 History.setState({
                   loggingId: null,
@@ -274,7 +274,7 @@ const Query = function (setting) {
     Socket.stack[Socket.stackIndex].apis = {};
     Socket.stack[Socket.stackIndex].apis[apiStack] = false;
     let r = {
-      client_id: Auth.getClientId(),
+      client_id: clientId(),
       scopes: params
     };
     r.stack = `${Socket.stackIndex}#STACK#${apiStack}`;

@@ -41,7 +41,7 @@ export default () => {
         setFormData({...formData, loginStatus: 'ok'});
         if (values.remember === true) {
           LocalStorage.set('l_rem', values.remember ? 1 : 0)
-          LocalStorage.set('l_acc', val)
+          LocalStorage.set('l_acc', values.account)
         }
         History.setState({
           loggingId: res.data.user_id,
