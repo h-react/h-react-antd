@@ -1,5 +1,5 @@
 import * as m from 'moment';
-import {I18nConfig} from 'h-react-antd';
+import {History} from 'h-react-antd';
 
 const MomentShift = {
   "en_us": "en-us",
@@ -13,7 +13,7 @@ const MomentShift = {
 const Moment = {
   locale: () => {
     if (m.locale() === 'en') {
-      let l = MomentShift[I18nConfig.lang];
+      let l = MomentShift[History.state.i18n.lang];
       if (l === undefined) {
         l = MomentShift.en_us
       }

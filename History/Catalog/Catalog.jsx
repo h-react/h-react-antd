@@ -8,26 +8,39 @@ class Catalog extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {}
-
+    this.state = {
+      openKeys: [],
+    }
   }
 
-  selectedKeys = () => {
-    return [
-      History.state.currentUrl,
-    ];
+  componentDidMount() {
+    this.setState({
+      openKeys: [],
+    });
   }
 
-  openKeys = (routers, keys = []) => {
-    routers = routers || History.state.catalog;
-    routers.forEach((val, idx) => {
+  openKeys = (catalog, keys = [], prevKeys = []) => {
+    catalog = catalog || History.state.catalog;
+    catalog.forEach((val, idx) => {
       if (typeof val.to === 'string') {
         if (val.to === History.state.currentUrl) {
           keys.push(val.to);
+          if (this.state.openKeys.length === 0) {
+            prevKeys.forEach((to) => {
+              if (!keys.includes(to)) {
+                keys.push(to);
+              }
+            });
+          }
         }
       } else if (typeof val.to === 'object') {
-        keys.push(`catalog_${idx}`);
-        keys = this.openKeys(val.to[1], keys);
+        prevKeys.push(`catalog_${idx}`);
+        keys = this.openKeys(val.to[1], keys, prevKeys);
+      }
+    });
+    this.state.openKeys.forEach((k) => {
+      if (!keys.includes(k)) {
+        keys.push(k);
       }
     });
     return keys;
@@ -76,13 +89,18 @@ class Catalog extends Component {
     return (
       <div className={`catalog ${theme}`}>
         <Menu
-          defaultSelectedKeys={this.selectedKeys()}
-          defaultOpenKeys={this.openKeys()}
+          defaultSelectedKeys={[History.state.currentUrl]}
+          openKeys={this.openKeys()}
           mode="inline"
           theme={theme}
           inlineCollapsed={History.state.setting.enableSmallMenu}
           onClick={(e) => {
             History.push(e.key);
+          }}
+          onOpenChange={(openKeys) => {
+            this.setState({
+              openKeys: openKeys
+            });
           }}
         >
           {this.renderSub()}
