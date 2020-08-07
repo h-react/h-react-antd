@@ -1,5 +1,7 @@
 import {Api, History} from './../index';
 
+const limiter = {};
+
 const Index = (trans, lang = null) => {
   if (lang === null) {
     lang = History.state.i18n.lang;
@@ -18,11 +20,24 @@ const Index = (trans, lang = null) => {
   trans.forEach((t, idx) => {
     t = t.toUpperCase();
     if (History.state.i18n.data[lang][t] === undefined || !History.state.i18n.data[lang][t]) {
-      Api.query().post({I18N_SET: {unique_key: t}}, (res) => {
-        if (res.code === 200) {
-          console.log(res);
-        }
-      });
+      if (limiter[t] !== true) {
+        limiter[t] = true;
+        Api.query().post({I18N_SET: {unique_key: t}}, (res) => {
+          if (res.code === 200) {
+            limiter[t] = false;
+            if (res.data.i18n_unique_key === t) {
+              History.state.i18n.support.forEach((l) => {
+                if (res.data[`i18n_${l}`]) {
+                  History.state.i18n.data[l][t] = res.data[`i18n_${l}`];
+                }
+              });
+              History.setState({
+                i18n: History.state.i18n,
+              });
+            }
+          }
+        });
+      }
     }
     let l = History.state.i18n.data[lang][t];
     if (!l) {
