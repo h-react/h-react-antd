@@ -91,13 +91,13 @@ const $History = {
     }
     $History.remove = (idx, next) => {
       if (!$History.dispatch()) {
-        if ($this.state.subPages.length < 2) {
+        if ($History.state.subPages.length < 2) {
           return;
         }
         $History.dispatch(true);
         $History.state.subPages.splice(idx, 1);
         $History.setState({
-          subPages: $this.state.subPages,
+          subPages: $History.state.subPages,
           tabsActiveKey: '' + next,
           currentUrl: $History.state.subPages[next],
         });
@@ -111,7 +111,7 @@ const $History = {
         const idx = Number.parseInt($History.state.tabsActiveKey, 10);
         $History.state.subPages[idx] = url;
         $History.setState({
-          subPages: $this.state.subPages,
+          subPages: $History.state.subPages,
           currentUrl: url,
         });
         window.history.replaceState(null, null, $History.prefix + url);
@@ -124,7 +124,7 @@ const $History = {
         $History.efficacy('change', idx);
         $History.setState({
           tabsActiveKey: '' + idx,
-          currentUrl: $this.state.subPages[idx],
+          currentUrl: $History.state.subPages[idx],
         });
         window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx]);
       }
