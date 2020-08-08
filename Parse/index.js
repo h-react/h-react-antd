@@ -297,6 +297,29 @@ const Parse = {
       res = callValue();
     }
     return res;
+  },
+
+  removeTable: (obj, tableName) => {
+    if (!obj || !tableName) {
+      return obj;
+    }
+    let res = null;
+    if (Array.isArray(obj)) {
+      res = [];
+      obj.forEach((v) => {
+        let r = {};
+        for (let i in v) {
+          r[i.replace(tableName, '')] = v[i];
+        }
+        res.push(r);
+      });
+    } else if (typeof obj === 'object') {
+      res = {};
+      for (let i in obj) {
+        res[i.replace(tableName, '')] = obj[i];
+      }
+    }
+    return res;
   }
 
 };

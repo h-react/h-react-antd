@@ -12,7 +12,7 @@ export default class Braft extends Component {
     super(props);
     this.state = {
       code: '',
-      editorState: BraftEditor.createEditorState(),
+      editorState: BraftEditor.createEditorState(props.value || ''),
     }
   }
 
@@ -35,7 +35,6 @@ export default class Braft extends Component {
               title: 'HTML ' + I18n('code'),
               okText: I18n('sure'),
               onOk: () => {
-                console.log(this.state.code);
                 this.setState({
                   editorState: BraftEditor.createEditorState(this.state.code),
                 });
