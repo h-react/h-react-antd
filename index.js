@@ -18,3 +18,4 @@ export {default as Parse} from './Parse';
 export {default as Path} from './Path';
 export {default as Xoss} from './Xoss';
 export {default as Moment} from './Moment';
+export {default as Braft} from './Braft';

@@ -6,22 +6,23 @@ const AntdLangs = {
   "ja_jp": "ja_JP",
   "ko_kr": "ko_KR",
   "zh_cn": "zh_CN",
-  "zh_hk": "zh_TW",
+  "zh_hk": "zh_HK",
   "zh_tw": "zh_TW"
+};
+
+const BraftEditorLangs = {
+  "en_us": "en",
+  "ja_jp": "jpn",
+  "ko_kr": "kr",
+  "zh_cn": "zh",
+  "zh_hk": "zh-hant",
+  "zh_tw": "zh-hant"
 };
 
 const $History = {
   prefix: '',
   dispatching: false,
   dispatch: null,
-  i18nAntd: () => {
-    let l = AntdLangs[$History.state.i18n.lang];
-    if (l === undefined) {
-      l = AntdLangs.en_us
-    }
-    const obj = require(`antd/es/locale/${l}.js`);
-    return obj.default;
-  },
   efficacy: (action, idx = 0) => {
     idx = Number.parseInt(idx, 10);
     const subs = document.querySelectorAll(".subPages >.subs > div");
@@ -104,6 +105,19 @@ const $History = {
         $History.efficacy('remove', next);
       }
     }
+    $History.replace = (url) => {
+      if (!$History.dispatch()) {
+        $History.dispatch(true);
+        const idx = Number.parseInt($History.state.tabsActiveKey, 10);
+        $History.state.subPages[idx] = url;
+        $History.setState({
+          subPages: $this.state.subPages,
+          currentUrl: url,
+        });
+        window.history.replaceState(null, null, $History.prefix + url);
+        $History.efficacy('change', idx);
+      }
+    }
     $History.change = (idx) => {
       if (!$History.dispatch()) {
         $History.dispatch(true);
@@ -114,6 +128,18 @@ const $History = {
         });
         window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx]);
       }
+    }
+    // other
+    $History.i18nAntd = () => {
+      let l = AntdLangs[$History.state.i18n.lang];
+      if (l === undefined) {
+        l = AntdLangs.en_us
+      }
+      const obj = require(`antd/es/locale/${l}.js`);
+      return obj.default;
+    }
+    $History.i18nBraftEditor = () => {
+      return BraftEditorLangs[$History.state.i18n.lang];
     }
   },
 }

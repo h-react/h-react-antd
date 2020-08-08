@@ -95,6 +95,7 @@ const Socket = {
               History.setState({
                 loggingId: null,
               });
+              LocalStorage.set('h-react-logging-id', null);
             });
           } else {
             message.warning(I18n('OPERATION_NOT_PERMISSION'));
@@ -203,6 +204,7 @@ const Query = function (setting) {
                 History.setState({
                   loggingId: null,
                 });
+                LocalStorage.set('h-react-logging-id', null);
               });
             }
             then({code: 500, msg: I18n('LIMITED_OPERATION'), data: null});

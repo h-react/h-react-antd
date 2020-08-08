@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {message, Form, Input, Button, Checkbox} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
-import {Api, Auth, History, I18n} from 'h-react-antd/index';
+import {Api, History, I18n} from 'h-react-antd/index';
 import LocalStorage from "../../Storage/LocalStorage";
 
 export default () => {
@@ -68,12 +68,8 @@ export default () => {
     >
       <Form.Item
         name="account"
-        rules={[
-          {
-            required: true,
-            message: I18n(['PLEASE_INPUT', 'YOUR', 'ACCOUNT']) + '!',
-          },
-        ]}
+        label={I18n('ACCOUNT')}
+        rules={[{required: true}]}
       >
         <Input
           name="account"
@@ -85,12 +81,8 @@ export default () => {
       </Form.Item>
       <Form.Item
         name="password"
-        rules={[
-          {
-            required: true,
-            message: I18n(['PLEASE_INPUT', 'YOUR', 'PASSWORD']) + '!',
-          },
-        ]}
+        label={I18n('PASSWORD')}
+        rules={[{required: true}]}
       >
         <Input.Password
           name="password"

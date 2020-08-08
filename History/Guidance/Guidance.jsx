@@ -114,7 +114,7 @@ class Guidance extends Component {
             });
             LocalStorage.set('h-react-usual-pages', this.state.usualPages);
           }}>
-          <PushpinOutlined/>加入常用
+          <PushpinOutlined/>{I18n('Join common')}
         </Button>
         <Button
           block danger
@@ -147,9 +147,9 @@ class Guidance extends Component {
     );
   }
 
-  renderTabs = () => {
+  renderTabGuide = () => {
     return (
-      <div className="tabs">
+      <div className="barsGuides">
         <Tabs
           type="editable-card"
           hideAdd={true}
@@ -246,12 +246,14 @@ class Guidance extends Component {
                 size="small"
                 type="danger"
                 onClick={() => {
+                  message.loading(I18n('LOGGING OUT'));
                   Api.query().post({USER_LOGOUT: {}}, (res) => {
                     if (res.code === 200) {
                       message.success(I18n('LOGOUT_SUCCESS'));
                       History.setState({
                         loggingId: null,
                       });
+                      LocalStorage.set('h-react-logging-id', null);
                     } else {
                       message.error(I18n(res.msg));
                     }
@@ -261,7 +263,7 @@ class Guidance extends Component {
             </Help>
           </div>
         </div>
-        {this.renderTabs()}
+        {this.renderTabGuide()}
       </div>
     );
   }

@@ -89,7 +89,7 @@ class Catalog extends Component {
     return (
       <div className={`catalog ${theme}`}>
         <Menu
-          defaultSelectedKeys={[History.state.currentUrl]}
+          selectedKeys={[History.state.currentUrl]}
           openKeys={this.openKeys()}
           mode="inline"
           theme={theme}
