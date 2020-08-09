@@ -1,6 +1,6 @@
 import './Braft.less';
 import React, {Component} from 'react';
-import {Input, Modal} from 'antd';
+import {Input, message, Modal} from 'antd';
 import BraftEditor from 'braft-editor'
 import {History, I18n} from "../index";
 
@@ -11,7 +11,7 @@ export default class Braft extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      code: '',
+      code: props.value || '',
       editorState: BraftEditor.createEditorState(props.value || ''),
     }
   }
@@ -29,6 +29,10 @@ export default class Braft extends Component {
           type: 'button',
           text: 'HTML',
           onClick: () => {
+            this.state.code = this.state.editorState.toHTML();
+            this.setState({
+              code: this.state.code,
+            });
             Modal.info({
               maskClosable: true,
               width: '75%',
@@ -84,7 +88,7 @@ export default class Braft extends Component {
         value={this.state.editorState}
         onChange={(value) => {
           this.setState({
-            editorState: value
+            editorState: value,
           });
           this.props.onChange(value.toHTML());
         }}

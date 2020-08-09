@@ -11,6 +11,9 @@ const MomentShift = {
 };
 
 const Moment = {
+  create: () => {
+    return m();
+  },
   locale: () => {
     if (m.locale() === 'en') {
       let l = MomentShift[History.state.i18n.lang];
@@ -20,7 +23,17 @@ const Moment = {
       m.locale(l);
     }
   },
-  format: (timestamp) => {
+  unix: (momentObj = null, withMillis = false) => {
+    if (!momentObj) {
+      momentObj = Moment.create();
+    }
+    let u = momentObj.valueOf();
+    if (!withMillis) {
+      u = Math.floor(u * 0.001);
+    }
+    return u;
+  },
+  format: (timestamp = null) => {
     const time = new Date().getTime();
     if (!timestamp) {
       timestamp = time;
