@@ -1,3 +1,5 @@
+const ParseCache = {};
+
 const Parse = {
 
   /**
@@ -94,16 +96,30 @@ const Parse = {
 
   /**
    * antd mapping value转文本
+   * @param map
+   * @param value
+   * @param cacheKey 缓存key，效率增加
+   * @returns {string|*}
    */
-  mapLabel: (map, value) => {
+  mapLabel: (map, value, cacheKey = null) => {
     if (!map || !value) {
       return '';
     }
+    if (cacheKey) {
+      if (ParseCache[cacheKey]) {
+        if (ParseCache[cacheKey][value]) {
+          return ParseCache[cacheKey][value];
+        }
+      } else {
+        ParseCache[cacheKey] = {};
+      }
+    }
     let res = '';
     for (const k in map) {
+      if (cacheKey) ParseCache[cacheKey][map[k].value] = map[k].label;
       if (map[k].value === value) {
         res = map[k].label;
-        break;
+        if (!cacheKey) break;
       }
     }
     return res;
@@ -111,16 +127,30 @@ const Parse = {
 
   /**
    * antd mapping label转value
+   * @param map
+   * @param label
+   * @param cacheKey 缓存key，效率增加
+   * @returns {string}
    */
-  mapValue: (map, label) => {
+  mapValue: (map, label, cacheKey = null) => {
     if (!map || !label) {
       return '';
     }
+    if (cacheKey) {
+      if (ParseCache[cacheKey]) {
+        if (ParseCache[cacheKey][label]) {
+          return ParseCache[cacheKey][label];
+        }
+      } else {
+        ParseCache[cacheKey] = {};
+      }
+    }
     let res = '';
     for (const k in map) {
+      if (cacheKey) ParseCache[cacheKey][map[k].label] = map[k].value;
       if (map[k].label === label) {
         res = map[k].value;
-        break;
+        if (!cacheKey) break;
       }
     }
     return res;
