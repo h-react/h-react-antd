@@ -11,7 +11,10 @@ const MomentShift = {
 };
 
 const Moment = {
-  create: () => {
+  create: (data = null) => {
+    if (typeof data === 'number') {
+      return m.unix(data)
+    }
     return m();
   },
   locale: () => {
