@@ -78,9 +78,6 @@ class Initial extends Component {
           .then((r) => {
             pre[p] = r;
             this.state.preprocessingStack -= 1;
-            this.setState({
-              preprocessingStack: this.state.preprocessingStack,
-            });
           })
           .catch((error) => {
             this.state.preprocessingError.push(error);
