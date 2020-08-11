@@ -39,6 +39,7 @@ class Initial extends Component {
     if (props.preprocessing) {
       this.state.preprocessingStack = 1 + this.state.preprocessingLength;
       this._preprocessing(props.preprocessing).then((res) => {
+        console.log(res);
         History.setState(res);
         if (this.state.router[this.location.pathname]) {
           History.state.subPages.push(this.location.url);
