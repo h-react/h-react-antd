@@ -89,7 +89,7 @@ const Socket = {
             History.setState({
               loggingId: null,
             });
-            LocalStorage.set('h-react-logging-id', null);
+            LocalStorage.clear('h-react-logging-id');
           } else {
             console.error('OPERATION_NOT_PERMISSION');
           }
@@ -196,7 +196,7 @@ const Query = function (setting) {
               History.setState({
                 loggingId: null,
               });
-              LocalStorage.set('h-react-logging-id', null);
+              LocalStorage.clear('h-react-logging-id');
             }
             then({code: 500, msg: 'LIMITED_OPERATION', data: null});
             return;
