@@ -9,6 +9,7 @@ import {
   SettingOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
+  ReloadOutlined,
 } from '@ant-design/icons';
 import {
   Api,
@@ -116,6 +117,14 @@ class Guidance extends Component {
           }}>
           <PushpinOutlined/>{I18n('Join common')}
         </Button>
+        {/*<Button*/}
+        {/*  block*/}
+        {/*  type="text"*/}
+        {/*  onClick={() => {*/}
+        {/*    this.componentDidMount();*/}
+        {/*  }}>*/}
+        {/*  <ReloadOutlined/>{I18n('Reload')}*/}
+        {/*</Button>*/}
         <Button
           block danger
           type="text"

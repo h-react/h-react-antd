@@ -1,6 +1,6 @@
 import './Braft.less';
 import React, {Component} from 'react';
-import {Input, message, Modal} from 'antd';
+import {Input, Modal} from 'antd';
 import BraftEditor from 'braft-editor'
 import {History, I18n} from "../index";
 

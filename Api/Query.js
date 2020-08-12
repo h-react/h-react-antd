@@ -1,8 +1,7 @@
-import {History, I18n, Parse} from 'h-react-antd';
+import {History, Parse} from 'h-react-antd';
 import Crypto from "./Crypto";
 import axios from "axios";
 import nanoid from "nanoid";
-import {message} from "antd";
 import LocalStorage from "../Storage/LocalStorage";
 
 /**
@@ -41,8 +40,7 @@ const Socket = {
     ApiSocket[host].onopen = () => {
       console.log('connection');
       console.log((new Date()).getMinutes() + ':' + (new Date()).getSeconds());
-      message.destroy();
-      message.info(I18n('CONNECT_SERVER_SUCCESS'));
+      console.info('CONNECT_SERVER_SUCCESS');
       if (Socket.queue.length > 0) {
         let q = Socket.queue.shift();
         while (q !== undefined) {
@@ -55,14 +53,14 @@ const Socket = {
       const result = Crypto.is(conf.crypto) ? Crypto.decode(msg.data, conf.crypto) : Parse.jsonDecode(msg.data);
       let stack = result.stack || null;
       if (stack === null) {
-        message.error(I18n('STACK_ERROR'));
+        console.error('STACK_ERROR');
         return;
       }
       stack = stack.split('#STACK#');
       const stackIndex = stack[0];
       const stackKey = stack[1];
       if (typeof Socket.stack[stackIndex].then !== 'function') {
-        message.error(I18n("STACK_THEN_ERROR"));
+        console.error("STACK_THEN_ERROR");
         return;
       }
       Socket.stack[stackIndex].apis[stackKey] = result;
@@ -76,29 +74,24 @@ const Socket = {
           } else {
             const res = Socket.stack[stackIndex].apis[key];
             if (typeof res === 'object') {
-              if (res.msg && res.msg !== '') {
-                res.msg = I18n(res.msg)
-              }
               response.push(res);
               if (typeof res.code === 'number' && res.code === 403) {
                 hasNotAuth = true;
               }
             } else {
-              response.push({code: 500, msg: I18n('API_ERROR'), data: null});
+              response.push({code: 500, msg: 'API_ERROR', data: null});
             }
           }
         });
       if (totalFinish === true) {
         if (hasNotAuth === true) {
           if (History.state.loggingId !== null) {
-            message.error(I18n('LOGIN_TIMEOUT_OR_NOT_PERMISSION'), 2.00, () => {
-              History.setState({
-                loggingId: null,
-              });
-              LocalStorage.set('h-react-logging-id', null);
+            History.setState({
+              loggingId: null,
             });
+            LocalStorage.set('h-react-logging-id', null);
           } else {
-            message.warning(I18n('OPERATION_NOT_PERMISSION'));
+            console.error('OPERATION_NOT_PERMISSION');
           }
         } else {
           const then = Socket.stack[stackIndex].then;
@@ -127,17 +120,17 @@ const Socket = {
       if (ApiSocket[host].readyState === Socket.state.OPEN) {
         ApiSocket[host].send(Crypto.encode(params, conf.crypto));
       } else if (ApiSocket[host].readyState === Socket.state.CONNECTING) {
-        message.loading(I18n('CONNECT_SERVER_TRYING'));
+        console.info('CONNECT_SERVER_TRYING');
         Socket.queue.push(params);
       } else if (ApiSocket[host].readyState === Socket.state.CLOSING) {
-        message.warning(I18n('CONNECT_SERVER_CLOSING'));
+        console.error('CONNECT_SERVER_CLOSING');
         Socket.queue.push(params);
       } else if (ApiSocket[host].readyState === Socket.state.CLOSED) {
-        message.error(I18n('CONNECT_SERVER_CLOSED'));
+        console.error('CONNECT_SERVER_CLOSED');
         Socket.queue.push(params);
       }
     } else {
-      message.error(I18n("CONNECT_SERVER_COULD_NOT_ACCESS"));
+      console.error("CONNECT_SERVER_COULD_NOT_ACCESS");
       Socket.queue.push(params);
     }
   },
@@ -200,60 +193,57 @@ const Query = function (setting) {
         if (typeof response.data === 'object') {
           if (typeof response.data.code === 'number' && response.data.code === 444) {
             if (History.state.loggingId !== null) {
-              message.error(I18n('LOGIN_TIMEOUT'), 2.00, () => {
-                History.setState({
-                  loggingId: null,
-                });
-                LocalStorage.set('h-react-logging-id', null);
+              History.setState({
+                loggingId: null,
               });
+              LocalStorage.set('h-react-logging-id', null);
             }
-            then({code: 500, msg: I18n('LIMITED_OPERATION'), data: null});
+            then({code: 500, msg: 'LIMITED_OPERATION', data: null});
             return;
           }
           then(response.data);
         } else {
-          then({code: 500, msg: I18n('API_ERROR'), data: null});
+          then({code: 500, msg: 'API_ERROR', data: null});
         }
       })
       .catch((error) => {
         const status = (error.response && error.response.status) ? error.response.status : -1;
         switch (status) {
           case 400:
-            error.message = I18n('API_ERROR_QUERY');
+            error.message = 'API_ERROR_QUERY';
             break;
           case 401:
-            error.message = I18n('API_ERROR_NOT_AUTH');
+            error.message = 'API_ERROR_NOT_AUTH';
             break;
           case 403:
-            error.message = I18n('API_ERROR_REJECT');
+            error.message = 'API_ERROR_REJECT';
             break;
           case 404:
-            error.message = I18n('API_ERROR_ABORT');
+            error.message = 'API_ERROR_ABORT';
             break;
           case 408:
-            error.message = I18n('API_ERROR_TIMEOUT');
+            error.message = 'API_ERROR_TIMEOUT';
             break;
           case 500:
-            error.message = I18n('API_ERROR_SERVER');
+            error.message = 'API_ERROR_SERVER';
             break;
           case 501:
-            error.message = I18n('API_ERROR_NOT_SERVICE');
+            error.message = 'API_ERROR_NOT_SERVICE';
             break;
           case 502:
-            error.message = I18n('API_ERROR_NET');
+            error.message = 'API_ERROR_NET';
             break;
           case 503:
-            error.message = I18n('API_ERROR_SERVICE_DISABLE');
+            error.message = 'API_ERROR_SERVICE_DISABLE';
             break;
           case 504:
-            error.message = I18n('API_ERROR_NET_TIMEOUT');
+            error.message = 'API_ERROR_NET_TIMEOUT';
             break;
           case 505:
-            error.message = I18n('API_ERROR_NOT_SUPPORT_HTTP');
+            error.message = 'API_ERROR_NOT_SUPPORT_HTTP';
             break;
           default:
-            console.error(error.message);
-            error.message = I18n('API_ERROR_DEFAULT') + `(${status}):` + error.message;
+            break;
         }
         then({code: status, msg: error.message, data: null});
       });
@@ -280,7 +270,6 @@ const Query = function (setting) {
       scopes: params
     };
     r.stack = `${Socket.stackIndex}#STACK#${apiStack}`;
-    console.log(r);
     r = Parse.jsonEncode(r);
     Socket.send({host: this.host, crypto: this.crypto}, r);
   };
