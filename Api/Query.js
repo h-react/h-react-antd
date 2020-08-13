@@ -1,8 +1,7 @@
-import {History, Parse} from 'h-react-antd';
-import Crypto from "./Crypto";
+import {History, Parse, LocalStorage} from 'h-react-antd';
 import axios from "axios";
 import nanoid from "nanoid";
-import LocalStorage from "../Storage/LocalStorage";
+import Crypto from "./Crypto";
 
 /**
  * 获取客户端ID
@@ -60,7 +59,7 @@ const Socket = {
       const stackIndex = stack[0];
       const stackKey = stack[1];
       if (typeof Socket.stack[stackIndex].then !== 'function') {
-        console.error("STACK_THEN_ERROR");
+        console.error('STACK_THEN_ERROR');
         return;
       }
       Socket.stack[stackIndex].apis[stackKey] = result;
@@ -123,7 +122,7 @@ const Socket = {
         console.info('CONNECT_SERVER_TRYING');
         Socket.queue.push(params);
       } else if (ApiSocket[host].readyState === Socket.state.CLOSING) {
-        console.error('CONNECT_SERVER_CLOSING');
+        console.info('CONNECT_SERVER_CLOSING');
         Socket.queue.push(params);
       } else if (ApiSocket[host].readyState === Socket.state.CLOSED) {
         console.error('CONNECT_SERVER_CLOSED');
@@ -270,6 +269,7 @@ const Query = function (setting) {
       scopes: params
     };
     r.stack = `${Socket.stackIndex}#STACK#${apiStack}`;
+    console.log(r);
     r = Parse.jsonEncode(r);
     Socket.send({host: this.host, crypto: this.crypto}, r);
   };
