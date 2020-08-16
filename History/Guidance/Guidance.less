@@ -1,5 +1,9 @@
 @charset "UTF-8";
 
+.ant-tabs > .ant-tabs-nav, .ant-tabs > div > .ant-tabs-nav {
+  margin-bottom: 6px;
+}
+
 .app > .container .exhibition > .guidance {
 
   display: flex;
@@ -31,7 +35,25 @@
     }
   }
 
-  > .barsGuides {
+  .top-operate.light {
+    background: #ffffff;
+  }
+
+  .top-operate.dark {
+    background: #001529;
+
+    .ant-btn.ant-btn-text {
+      color: #ffffff;
+    }
+
+    .ant-btn.ant-btn-text:hover {
+      background: #5e5d5d
+    }
+  }
+
+  > .bars-guides {
+
+    margin: 10px 10px 0 10px;
 
     .right-cm:hover {
       background: #ffffff;

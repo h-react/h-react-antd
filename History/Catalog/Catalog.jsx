@@ -92,7 +92,7 @@ class Catalog extends Component {
 
   render() {
 
-    const theme = History.state.setting.enableDarkMenu ? 'dark' : 'light'
+    const theme = History.state.setting.enableDarkMenu ? 'dark' : 'light';
 
     return (
       <div className={`catalog ${theme}`}>

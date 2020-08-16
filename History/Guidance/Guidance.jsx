@@ -68,7 +68,7 @@ class Guidance extends Component {
                 key={idx}
                 closable
                 icon={<PushpinOutlined/>}
-                color={History.state.currentUrl === url ? "processing" : "default"}
+                color={History.state.currentUrl === url ? "#2598ea" : "default"}
                 onClick={() => {
                   History.push(url);
                 }}
@@ -141,7 +141,7 @@ class Guidance extends Component {
 
   renderTabGuide = () => {
     return (
-      <div className="barsGuides">
+      <div className="bars-guides">
         <Tabs
           type="editable-card"
           hideAdd={true}
@@ -156,6 +156,7 @@ class Guidance extends Component {
               History.remove(targetKey);
             }
           }}
+          tabBarStyle={{}}
         >
           {
             History.state.subPages.map((val) => {
@@ -192,18 +193,26 @@ class Guidance extends Component {
   }
 
   render() {
+
+    const theme = History.state.setting.enableDarkMenu ? 'dark' : 'light';
+    const btnType = History.state.setting.enableDarkMenu ? 'text' : 'default';
+
     return (
       <div className="guidance">
-        <div className="top-operate">
+        <div className={`top-operate ${theme}`}>
           <div className="left">{this.renderUsual()}</div>
           <div className="right">
             <SettingContainer placement="right">
-              <Button size="small" icon={<SettingOutlined/>}>{I18n('SETTING')}</Button>
+              <Button
+                type={btnType}
+                size="small"
+                icon={<SettingOutlined/>}
+              >{I18n('SETTING')}</Button>
             </SettingContainer>
             <Button
+              type={this.state.fullscreen ? 'dashed' : btnType}
               size="small"
               icon={this.state.fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}
-              type={this.state.fullscreen ? 'dashed' : 'default'}
               onClick={() => {
                 const fullscreen = !this.state.fullscreen;
                 this.setState({fullscreen: fullscreen});
@@ -211,7 +220,11 @@ class Guidance extends Component {
               }}
             >{I18n('FULLSCREEN')}</Button>
             <I18nContainer placement="right">
-              <Button size="small" icon={<TranslationOutlined/>}>
+              <Button
+                type={btnType}
+                size="small"
+                icon={<TranslationOutlined/>}
+              >
                 {I18n('Translate', Navigator.language())}
               </Button>
             </I18nContainer>
@@ -224,8 +237,9 @@ class Guidance extends Component {
             <Help title={I18n(['LOGOUT', 'LOGIN'])}>
               <Button
                 icon={<ArrowRightOutlined/>}
+                danger
                 size="small"
-                type="danger"
+                type="primary"
                 onClick={() => {
                   message.loading(I18n('LOGGING OUT'));
                   Api.query().post({USER_LOGOUT: {}}, (res) => {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Radio, Drawer} from 'antd';
-import {LocalStorage, History} from "../../index";
+import {LocalStorage, History, I18n, Navigator} from "../../index";
 
 import './Container.less';
 
@@ -32,7 +32,7 @@ class Container extends Component {
         </span>
         <Drawer
           className="h-react-i18n"
-          title="CHOICE LANGUAGE"
+          title={I18n("CHOICE LANGUAGE", Navigator.language())}
           placement={this.state.drawerPlacement}
           closable={false}
           onClose={() => {
