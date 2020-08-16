@@ -20,11 +20,24 @@ class Catalog extends Component {
     });
   }
 
+  checkOpenKeys = (key) => {
+    if (key === History.state.currentUrl) {
+      return true;
+    }
+    let res = false;
+    for (let i in History.state.subPages) {
+      if (key === History.state.subPages[i].url) {
+        res = true;
+      }
+    }
+    return res;
+  }
+
   openKeys = (catalog, keys = [], prevKeys = []) => {
     catalog = catalog || History.state.catalog;
     catalog.forEach((val, idx) => {
       if (typeof val.to === 'string') {
-        if (val.to === History.state.currentUrl) {
+        if (this.checkOpenKeys(val.to)) {
           keys.push(val.to);
           if (this.state.openKeys.length === 0) {
             prevKeys.forEach((to) => {
