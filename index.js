@@ -8,6 +8,7 @@ export {default as LocalStorage} from './Storage/LocalStorage';
 export {default as SessionStorage} from './Storage/SessionStorage';
 
 export {default as Document} from './Document';
+export {default as Navigator} from './Navigator';
 
 export {default as History} from './History';
 export {default as HistoryInitial} from './History/Initial';

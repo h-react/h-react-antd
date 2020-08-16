@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button} from 'antd';
 import {TranslationOutlined} from '@ant-design/icons';
-import {I18n, I18nContainer} from 'h-react-antd/index';
+import {I18n, I18nContainer, Navigator} from 'h-react-antd/index';
 import LoginForm from './Form'
 import './Login.less';
 
@@ -18,7 +18,7 @@ class Login extends Component {
           </div>
         </div>
         <I18nContainer placement="right">
-          <Button className="tranBtn" icon={<TranslationOutlined/>}>Translate</Button>
+          <Button className="tranBtn" icon={<TranslationOutlined/>}>{I18n('Translate', Navigator.language())}</Button>
         </I18nContainer>
       </div>
     );

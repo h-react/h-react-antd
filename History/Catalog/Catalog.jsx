@@ -2,6 +2,7 @@ import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
 import {History, I18n} from 'h-react-antd';
+import Help from "../../Setting/Help";
 
 class Catalog extends Component {
 
@@ -63,7 +64,14 @@ class Catalog extends Component {
         if (typeof val.to === 'string') {
           return (
             <Menu.Item key={val.to}>
-              {val.icon !== undefined ? val.icon : ''}<span>{I18n(History.state.router[val.to].label)}</span>
+              {val.icon !== undefined ? val.icon : ''}
+              {
+                History.state.currentUrl === val.to ?
+                  <Help title={I18n('Click again to display multiple pages.')}>
+                    <span>{I18n(History.state.router[val.to].label)}</span>
+                  </Help>
+                  : I18n(History.state.router[val.to].label)
+              }
             </Menu.Item>
           );
         }

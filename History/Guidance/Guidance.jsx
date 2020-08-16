@@ -9,17 +9,18 @@ import {
   SettingOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
-  ReloadOutlined,
 } from '@ant-design/icons';
 import {
   Api,
   Document,
+  Navigator,
   History,
   I18n,
   I18nContainer,
-  LocalStorage, Parse,
+  LocalStorage,
+  Parse,
   SettingContainer,
-  SettingHelp
+  SettingHelp,
 } from "../../index";
 import Me from "../Me";
 import Help from "../../Setting/Help";
@@ -96,7 +97,7 @@ class Guidance extends Component {
     return (
       <div
         className="right-cm"
-        style={{top: this.state.contextMenu.y, left: this.state.contextMenu.x}}
+        style={{top: this.state.contextMenu.y - 10, left: this.state.contextMenu.x - 10}}
         onMouseLeave={() => {
           this.setState({
             contextMenu: null,
@@ -108,6 +109,10 @@ class Guidance extends Component {
           type="text"
           disabled={this.state.usualPages.includes(this.state.contextMenu.url)}
           onClick={() => {
+            if (this.state.usualPages.length >= 5) {
+              message.error(I18n('Up to 5 tags'));
+              return;
+            }
             this.state.usualPages.push(this.state.contextMenu.url);
             this.setState({
               usualPages: this.state.usualPages,
@@ -206,7 +211,9 @@ class Guidance extends Component {
               }}
             >{I18n('FULLSCREEN')}</Button>
             <I18nContainer placement="right">
-              <Button size="small" icon={<TranslationOutlined/>}>Translate</Button>
+              <Button size="small" icon={<TranslationOutlined/>}>
+                {I18n('Translate', Navigator.language())}
+              </Button>
             </I18nContainer>
             {
               History.state.loggingId !== null &&
