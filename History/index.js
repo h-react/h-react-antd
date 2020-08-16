@@ -1,4 +1,5 @@
 import {message} from "antd";
+import nanoid from "nanoid";
 import {Parse} from "../index";
 
 const AntdLangs = {
@@ -23,27 +24,6 @@ const $History = {
   prefix: '',
   dispatching: false,
   dispatch: null,
-  efficacy: (action, idx = 0) => {
-    idx = Number.parseInt(idx, 10);
-    const subs = document.querySelectorAll(".subPages >.subs > div");
-    switch (action) {
-      case 'init':
-        subs[subs.length - 1].className = 'show';
-        break;
-      case 'push':
-        for (let i = 0; i < subs.length - 1; i++) {
-          subs[i].className = 'hide';
-        }
-        subs[subs.length - 1].className = 'show';
-        break;
-      case 'remove':
-      case 'change':
-        for (let i = 0; i < subs.length; i++) {
-          subs[i].className = (i === idx) ? 'show' : 'hide';
-        }
-        break;
-    }
-  },
   link: ($this) => {
     $History.app = $this;
     $History.state = $this.state;
@@ -73,60 +53,95 @@ const $History = {
         $History.dispatch(true);
         const location = Parse.urlDispatch(url);
         if ($History.state.router[location.pathname]) {
-          $History.state.subPages.push(location.url);
+          const key = nanoid(10);
+          $History.state.subPages.push({key: key, url: location.url});
           $History.setState({
             subPages: $History.state.subPages,
-            tabsActiveKey: '' + ($History.state.subPages.length - 1),
+            tabsActiveKey: key,
             currentUrl: location.url,
           });
           window.history.replaceState(null, null, $History.prefix + location.url);
-          const t = setTimeout(() => {
-            window.clearTimeout(t);
-            $History.efficacy('push');
-          }, 50)
         } else {
           message.error('History push fail:' + url);
         }
       }
     }
-    $History.remove = (idx, next) => {
+    $History.remove = (key) => {
       if (!$History.dispatch()) {
         if ($History.state.subPages.length < 2) {
           return;
         }
         $History.dispatch(true);
-        $History.state.subPages.splice(idx, 1);
+        let nextIdx = null;
+        let delIdx = null;
+        for (let i in $History.state.subPages) {
+          i = Number.parseInt(i, 10);
+          if (key === $History.state.subPages[i].key) {
+            delIdx = i;
+            if (key === $History.state.tabsActiveKey) {
+              if (i === 0) {
+                nextIdx = 0;
+              } else {
+                nextIdx = i - 1;
+              }
+            }
+            break;
+          }
+        }
+        if (delIdx === null) {
+          return;
+        }
+        $History.state.subPages.splice(delIdx, 1);
         $History.setState({
           subPages: $History.state.subPages,
-          tabsActiveKey: '' + next,
-          currentUrl: $History.state.subPages[next],
         });
-        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[next]);
-        $History.efficacy('remove', next);
+        if (nextIdx !== null) {
+          const next = $History.state.subPages[nextIdx];
+          if (next !== null) {
+            $History.setState({
+              tabsActiveKey: next.key,
+              currentUrl: next.url,
+            });
+            window.history.replaceState(null, null, $History.prefix + next.url);
+          }
+        }
       }
     }
     $History.replace = (url) => {
       if (!$History.dispatch()) {
         $History.dispatch(true);
-        const idx = Number.parseInt($History.state.tabsActiveKey, 10);
-        $History.state.subPages[idx] = url;
+        let idx = null;
+        for (let i in $History.state.subPages) {
+          if ($History.state.tabsActiveKey === $History.state.subPages[i].key) {
+            idx = i;
+            break;
+          }
+        }
+        const key = nanoid(10);
+        $History.state.subPages[idx] = {key: key, url: url};
         $History.setState({
           subPages: $History.state.subPages,
+          tabsActiveKey: key,
           currentUrl: url,
         });
         window.history.replaceState(null, null, $History.prefix + url);
-        $History.efficacy('change', idx);
       }
     }
-    $History.change = (idx) => {
+    $History.change = (key) => {
       if (!$History.dispatch()) {
         $History.dispatch(true);
-        $History.efficacy('change', idx);
+        let url = null;
+        for (let i in $History.state.subPages) {
+          if (key === $History.state.subPages[i].key) {
+            url = $History.state.subPages[i].url;
+            break;
+          }
+        }
         $History.setState({
-          tabsActiveKey: '' + idx,
-          currentUrl: $History.state.subPages[idx],
+          tabsActiveKey: key,
+          currentUrl: url,
         });
-        window.history.replaceState(null, null, $History.prefix + $History.state.subPages[idx]);
+        window.history.replaceState(null, null, $History.prefix + url);
       }
     }
     // other

@@ -117,34 +117,12 @@ class Guidance extends Component {
           }}>
           <PushpinOutlined/>{I18n('Join common')}
         </Button>
-        {/*<Button*/}
-        {/*  block*/}
-        {/*  type="text"*/}
-        {/*  onClick={() => {*/}
-        {/*    this.componentDidMount();*/}
-        {/*  }}>*/}
-        {/*  <ReloadOutlined/>{I18n('Reload')}*/}
-        {/*</Button>*/}
         <Button
           block danger
           type="text"
-          disabled={History.state.subPages.length < 2}
+          disabled={Object.entries(History.state.subPages).length < 2}
           onClick={() => {
-            let next = 0;
-            const targetKey = this.state.contextMenu.idx;
-            if (targetKey === History.state.tabsActiveKey) {
-              if (targetKey === 0) {
-                next = 0;
-              } else {
-                next = targetKey - 1;
-              }
-            } else if (targetKey > History.state.tabsActiveKey) {
-              next = targetKey - 1;
-            }
-            History.remove(targetKey, next);
-            History.setState({
-              tabsActiveKey: '' + next,
-            });
+            History.remove(this.state.contextMenu.key);
             this.setState({
               contextMenu: null,
             });
@@ -165,33 +143,21 @@ class Guidance extends Component {
           size="default"
           tabPosition="top"
           activeKey={History.state.tabsActiveKey}
-          onChange={(activeKey) => {
-            History.change(activeKey);
+          onChange={(targetKey) => {
+            History.change(targetKey);
           }}
           onEdit={(targetKey, action) => {
             if (action === 'remove') {
-              let next = Number.parseInt(History.state.tabsActiveKey) - 1;
-              if (targetKey === History.state.tabsActiveKey) {
-                if (targetKey === '0') {
-                  next = 0;
-                } else {
-                  next = Number.parseInt(targetKey) - 1;
-                }
-              } else if (targetKey > History.state.tabsActiveKey) {
-                next = Number.parseInt(targetKey) - 1;
-              }
-              History.remove(targetKey, next);
-              History.setState({
-                tabsActiveKey: '' + next,
-              });
+              History.remove(targetKey);
             }
           }}
         >
           {
-            History.state.subPages.map((url, idx) => {
-              const location = Parse.urlDispatch(url);
+            History.state.subPages.map((val) => {
+              const location = Parse.urlDispatch(val.url);
               const router = History.state.router[location.pathname];
               return <Tabs.TabPane
+                key={val.key}
                 tab={
                   <SettingHelp
                     placement="top"
@@ -201,16 +167,15 @@ class Guidance extends Component {
                     evt.preventDefault();
                     this.setState({
                       contextMenu: {
-                        idx: idx,
+                        key: val.key,
                         x: evt.pageX,
                         y: evt.pageY,
-                        url: url,
+                        url: val.url,
                       }
                     });
                   }}>{router.icon || null}{I18n(router.label)}</span>
                   </SettingHelp>
                 }
-                key={idx}
                 closable={History.state.subPages.length > 1}
               />
             })

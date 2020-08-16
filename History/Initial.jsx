@@ -21,7 +21,7 @@ class Initial extends Component {
       loggingId: LocalStorage.get('h-react-logging-id') || null,
       currentUrl: this.location.url,
       subPages: [],
-      tabsActiveKey: '0',
+      tabsActiveKey: '',
     }
 
     // setting
@@ -42,12 +42,11 @@ class Initial extends Component {
         console.log(res);
         History.setState(res);
         if (this.state.router[this.location.pathname]) {
-          History.state.subPages.push(this.location.url);
+          History.push(this.location.url);
         } else {
-          History.state.subPages.push('/');
+          History.push('/');
         }
         History.setState({
-          subPages: History.state.subPages,
           preprocessingStack: (this.state.preprocessingStack - 1)
         });
       })
@@ -120,10 +119,14 @@ class Initial extends Component {
               <div className="subPages">
                 <div className="subs">
                   {
-                    this.state.subPages.map((url, idx) => {
-                      const location = Parse.urlDispatch(url);
+                    this.state.subPages.map((val) => {
+                      const location = Parse.urlDispatch(val.url);
                       const Sub = this.state.router[location.pathname].component;
-                      return <div key={idx}><Sub/></div>;
+                      return <div
+                        key={val.key}
+                        className={val.key === this.state.tabsActiveKey ? 'show' : 'hide'}>
+                        <Sub/>
+                      </div>;
                     })
                   }
                 </div>
