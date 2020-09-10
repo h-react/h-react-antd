@@ -59,16 +59,6 @@ class Container extends Component {
         >
           <Row>
             <div className="setter">
-              <p>{I18n('ACCESSIBILITY')}</p>
-              <Col span={24}>
-                <Checkbox
-                  defaultChecked={History.state.setting.enableHelpTips}
-                  name="enableHelpTips"
-                  onChange={this.save}
-                >{I18n(['ENABLE', 'HELP', 'TIPS'])}</Checkbox>
-              </Col>
-            </div>
-            <div className="setter">
               <p>{I18n('STYLE')}</p>
               <Col span={24}>
                 <Checkbox
@@ -83,6 +73,30 @@ class Container extends Component {
                   name="enableSmallMenu"
                   onChange={this.save}
                 >{I18n(['ENABLE', 'SMALL', 'MENU'])}</Checkbox>
+              </Col>
+            </div>
+            <div className="setter">
+              <p>{I18n('ACCESSIBILITY')}</p>
+              <Col span={24}>
+                <Checkbox
+                  defaultChecked={History.state.setting.enableHelpTips}
+                  name="enableHelpTips"
+                  onChange={this.save}
+                >{I18n(['ENABLE', 'HELP', 'TIPS'])}</Checkbox>
+              </Col>
+              <Col span={24}>
+                <Checkbox
+                  defaultChecked={History.state.setting.enableFullscreen}
+                  name="enableFullscreen"
+                  onChange={this.save}
+                >{I18n(['ENABLE', 'FULLSCREEN', 'OPERATE'])}</Checkbox>
+              </Col>
+              <Col span={24}>
+                <Checkbox
+                  defaultChecked={History.state.setting.enableClearCache}
+                  name="enableClearCache"
+                  onChange={this.save}
+                >{I18n(['ENABLE', 'CLEAR CACHE'])}</Checkbox>
               </Col>
             </div>
           </Row>

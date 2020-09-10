@@ -9,6 +9,7 @@ import {
   SettingOutlined,
   FullscreenExitOutlined,
   FullscreenOutlined,
+  ClearOutlined,
 } from '@ant-design/icons';
 import {
   Api,
@@ -209,16 +210,37 @@ class Guidance extends Component {
                 icon={<SettingOutlined/>}
               >{I18n('SETTING')}</Button>
             </SettingContainer>
-            <Button
-              type={this.state.fullscreen ? 'dashed' : btnType}
-              size="small"
-              icon={this.state.fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}
-              onClick={() => {
-                const fullscreen = !this.state.fullscreen;
-                this.setState({fullscreen: fullscreen});
-                Document.fullscreen(fullscreen);
-              }}
-            >{I18n('FULLSCREEN')}</Button>
+            {
+              History.state.setting.enableFullscreen &&
+              <Button
+                type={this.state.fullscreen ? 'dashed' : btnType}
+                size="small"
+                icon={this.state.fullscreen ? <FullscreenExitOutlined/> : <FullscreenOutlined/>}
+                onClick={() => {
+                  const fullscreen = !this.state.fullscreen;
+                  this.setState({fullscreen: fullscreen});
+                  Document.fullscreen(fullscreen);
+                }}
+              >{I18n('FULLSCREEN')}</Button>
+            }
+            {
+              History.state.setting.enableClearCache &&
+              <Help title={I18n('Need to log in again')}>
+                <Button
+                  type={btnType}
+                  size="small"
+                  icon={this.state.fullscreen ? <ClearOutlined/> : <ClearOutlined/>}
+                  onClick={() => {
+                    message.info(I18n('Cache has been emptied'));
+                    LocalStorage.clearAll();
+                    const tgc = setTimeout(() => {
+                      window.clearTimeout(tgc);
+                      window.location = window.location;
+                    }, 500)
+                  }}
+                >{I18n('CLEAR CACHE')}</Button>
+              </Help>
+            }
             <I18nContainer placement="right">
               <Button
                 type={btnType}
