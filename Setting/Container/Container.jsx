@@ -89,7 +89,8 @@ class Container extends Component {
                   defaultChecked={History.state.setting.enableFullscreen}
                   name="enableFullscreen"
                   onChange={this.save}
-                >{I18n(['ENABLE', 'FULLSCREEN', 'OPERATE'])}</Checkbox>
+                >{I18n(['ENABLE', 'FULLSCREEN', 'OPERATE'])}
+                </Checkbox>
               </Col>
               <Col span={24}>
                 <Checkbox

@@ -91,7 +91,7 @@ class Catalog extends Component {
         if (typeof val.to === 'object') {
           return (
             <Menu.SubMenu
-              key={`catalog_${idx}`}
+              key={`catalog_${typeof val.to[0] === 'object' ? val.to[0].toString() : val.to[0]}`}
               title={<span>{val.icon !== undefined ? val.icon : ''}<span>{I18n(val.to[0])}</span></span>}
             >
               {this.renderSub(val.to[1])}
