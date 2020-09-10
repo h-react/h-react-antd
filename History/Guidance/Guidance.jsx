@@ -242,13 +242,15 @@ class Guidance extends Component {
               </Help>
             }
             <I18nContainer placement="right">
-              <Button
-                type={btnType}
-                size="small"
-                icon={<TranslationOutlined/>}
-              >
-                {I18n('Translate', Navigator.language())}
-              </Button>
+              <Help title={I18n('Switch language')}>
+                <Button
+                  type={btnType}
+                  size="small"
+                  icon={<TranslationOutlined/>}
+                >
+                  {I18n('Translate', Navigator.language())}
+                </Button>
+              </Help>
             </I18nContainer>
             {
               History.state.loggingId !== null &&
