@@ -17,6 +17,7 @@ export default class Confirm extends Component {
         placement="topRight"
         title={I18n('Are you sure you want to perform this operation?')}
         onConfirm={this.props.onConfirm}
+        disabled={this.props.disabled || false}
       >
         {this.props.children}
       </Popconfirm>
