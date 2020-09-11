@@ -10,6 +10,7 @@ import {
   FullscreenExitOutlined,
   FullscreenOutlined,
   ClearOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 import {
   Api,
@@ -23,7 +24,6 @@ import {
   SettingContainer,
   SettingHelp,
 } from "../../index";
-import Me from "../Me";
 import Help from "../../Setting/Help";
 
 class Guidance extends Component {
@@ -254,8 +254,12 @@ class Guidance extends Component {
             </I18nContainer>
             {
               History.state.loggingId !== null &&
-              <Help title={I18n('Click to modify personal information')}>
-                <Button size="small" type="primary"><Me/></Button>
+              <Help title={I18n('Click to modify personal password')}>
+                <Button size="small" type="primary" onClick={() => {
+                  History.push('/user/password');
+                }}>
+                  <UserOutlined/> {I18n(['modify', 'password'])}
+                </Button>
               </Help>
             }
             <Help title={I18n(['LOGOUT', 'LOGIN'])}>
