@@ -66,6 +66,24 @@ const $History = {
         }
       }
     }
+    $History.singleton = (url) => {
+      if (!$History.dispatch()) {
+        $History.dispatch(true);
+        const location = Parse.urlDispatch(url);
+        if ($History.state.router[location.pathname]) {
+          const key = nanoid(10);
+          $History.state.subPages = [{key: key, url: location.url}];
+          $History.setState({
+            subPages: $History.state.subPages,
+            tabsActiveKey: key,
+            currentUrl: location.url,
+          });
+          window.history.replaceState(null, null, $History.prefix + location.url);
+        } else {
+          message.error('History singleton fail:' + url);
+        }
+      }
+    }
     $History.remove = (key) => {
       if (!$History.dispatch()) {
         if ($History.state.subPages.length < 2) {

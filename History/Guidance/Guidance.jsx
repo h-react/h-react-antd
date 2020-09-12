@@ -11,6 +11,7 @@ import {
   FullscreenOutlined,
   ClearOutlined,
   UserOutlined,
+  DeleteColumnOutlined,
 } from '@ant-design/icons';
 import {
   Api,
@@ -95,6 +96,7 @@ class Guidance extends Component {
     if (this.state.contextMenu === null) {
       return null;
     }
+    const len = Object.entries(History.state.subPages).length;
     return (
       <div
         className="right-cm"
@@ -126,7 +128,20 @@ class Guidance extends Component {
         <Button
           block danger
           type="text"
-          disabled={Object.entries(History.state.subPages).length < 2}
+          disabled={len < 2}
+          onClick={() => {
+            History.singleton(this.state.contextMenu.url);
+            this.setState({
+              contextMenu: null,
+            });
+          }}
+        >
+          <DeleteColumnOutlined/>{I18n(['CLOSE', 'OTHER'])}
+        </Button>
+        <Button
+          block danger
+          type="text"
+          disabled={len < 2}
           onClick={() => {
             History.remove(this.state.contextMenu.key);
             this.setState({
