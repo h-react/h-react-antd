@@ -22,3 +22,4 @@ export {default as Parse} from './Parse';
 export {default as Moment} from './Moment';
 export {default as Braft} from './Braft';
 export {default as Confirm} from './Confirm';
+export {default as Approve} from './Approve';
