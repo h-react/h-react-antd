@@ -1,6 +1,6 @@
 import {History, Parse, LocalStorage} from 'h-react-antd';
 import axios from "axios";
-import {nanoid} from "nanoid";
+import nanoid from "nanoid";
 import Crypto from "./Crypto";
 
 /**

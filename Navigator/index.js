@@ -1,6 +1,8 @@
 /**
  * @param shakes 震动时间(number) | [震动时间(number)，停止时间(number)，震动时间(number)，停止时间(number)]
  */
+import {History} from "../index";
+
 const vibration = (shakes) => {
   window.navigator.vibrate = window.navigator.vibrate || window.navigator.webkitVibrate || window.navigator.mozVibrate || window.navigator.msVibrate;
   if (window.navigator.vibrate) {
@@ -76,6 +78,36 @@ const Navigator = {
     },
     shake: (shake) => {
       vibration(shake);
+    }
+  },
+  banReturn: () => {
+    if (window.history) {
+      window.history.pushState(null, null, document.URL);
+      window.onpopstate = function (event) {
+        window.history.pushState(null, null, History.state.currentUrl ? History.state.currentUrl : document.URL);
+      };
+      const banCode = (e) => {
+        const ev = e || window.event;//获取event对象
+        const obj = ev.target || ev.srcElement;//获取事件源
+        const t = obj.type || obj.getAttribute('type');//获取事件源类型
+        let vReadOnly = obj.getAttribute('readonly');
+        let vEnabled = obj.getAttribute('enabled');
+        vReadOnly = (vReadOnly === null) ? false : vReadOnly;
+        vEnabled = (vEnabled === null) ? true : vEnabled;
+        const flag1 = (ev.keyCode === 8
+          && (t === "password" || t === "text" || t === "textarea")
+          && (vReadOnly === true || vEnabled !== true)
+        );
+        const flag2 = (ev.keyCode === 8 && t !== "password" && t !== "text" && t !== "textarea");
+        if (flag2) {
+          return false;
+        }
+        if (flag1) {
+          return false;
+        }
+      }
+      document.onkeypress = banCode;
+      document.onkeydown = banCode;
     }
   }
 }

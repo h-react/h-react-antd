@@ -1,7 +1,7 @@
 import './Initial.less';
 import React, {Component} from 'react';
 import {ConfigProvider, Spin} from "antd";
-import {Api, Parse, History, LocalStorage} from "h-react-antd";
+import {Api, Parse, History, LocalStorage, Navigator} from "h-react-antd";
 import {LoadingOutlined} from "@ant-design/icons";
 
 import Login from "./Login";
@@ -51,6 +51,10 @@ class Initial extends Component {
         });
       })
     }
+  }
+
+  componentDidMount() {
+    Navigator.banReturn();
   }
 
   _preprocessingLength = (pre, len = 0) => {

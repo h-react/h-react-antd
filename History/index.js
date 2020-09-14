@@ -1,5 +1,5 @@
 import {message} from "antd";
-import {nanoid} from "nanoid";
+import nanoid from "nanoid";
 import {Parse} from "../index";
 
 const AntdLangs = {
