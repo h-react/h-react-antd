@@ -23,3 +23,6 @@ export {default as Moment} from './Moment';
 export {default as Braft} from './Braft';
 export {default as Confirm} from './Confirm';
 export {default as Approve} from './Approve';
+export {default as CascaderRegion} from './Cascader/Region';
+export {default as CascaderProvincial} from './Cascader/Provincial';
+export {default as CascaderMunicipal} from './Cascader/Municipal';
