@@ -6,6 +6,10 @@ const Index = (trans, lang = null) => {
   if (lang === null) {
     lang = History.state.i18n.lang;
   }
+  // 当设置语言支持仅有一种的时候，强制转为该语言
+  if (History.state.i18n.support.length <= 1) {
+    lang = History.state.i18n.support[0];
+  }
   if (typeof trans !== 'object') {
     trans = [trans];
   }

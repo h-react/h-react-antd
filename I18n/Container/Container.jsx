@@ -20,7 +20,7 @@ class Container extends Component {
   };
 
   render() {
-    if (History.state.i18n.support.length <= 0) {
+    if (History.state.i18n.support.length <= 1) {
       return null;
     }
     return (
