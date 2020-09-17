@@ -11,6 +11,11 @@ export default class Region extends Component {
   }
 
   render() {
-    return <Cascader options={data}/>;
+    return <Cascader
+      options={data}
+      onChange={(value) => {
+        this.props.onChange(value);
+      }}
+    />;
   }
 }
