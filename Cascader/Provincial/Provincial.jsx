@@ -13,6 +13,7 @@ export default class Provincial extends Component {
   render() {
     return <Cascader
       options={data}
+      value={this.props.value}
       onChange={(value) => {
         this.props.onChange(value);
       }}
