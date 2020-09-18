@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {message, Modal, Upload} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
+import ImgCrop from 'antd-img-crop';
 import {I18n, LocalStorage, Xoss} from '../../../index';
 
-export default class Image extends Component {
+export default class ImageCrop extends Component {
   static propTypes = {};
 
   constructor(props) {
@@ -69,51 +70,62 @@ export default class Image extends Component {
   render() {
     return (
       <div>
-        <Upload
-          action="/xoss"
-          data={{
-            client_id: LocalStorage.get('cid'),
-            scope: 'XOSS_UPLOAD',
-          }}
-          listType="picture-card"
-          fileList={this.state.fileList}
-          onPreview={this.handlePreview}
-          beforeUpload={this.beforeUpload}
-          onChange={({fileList}) => {
-            const files = [];
-            let ing = false;
-            fileList.forEach((f, idx) => {
-              if (f.response) {
-                if (f.response.code === 200 && f.response.data[0].result === 1) {
-                  files.push(f.response.data[0].data.xoss_key);
-                } else {
-                  f.thumbUrl = null;
-                  f.status = 'error';
-                }
-              }
-              if (f.status === 'uploading') {
-                ing = true;
-              }
-            });
-            this.setState({
-              fileList: fileList,
-            });
-            if (!ing) {
-              this.props.onChange(files);
-            }
-          }}
+        <ImgCrop
+          grid={true}
+          zoom={true}
+          rotate={true}
+          modalTitle={I18n(['crop picture'])}
+          modalOk={I18n('ok')}
+          modalCancel={I18n('cancel')}
+          aspect={this.props.aspect || 1}
+          shape={this.props.shape || 'rect'}
         >
-          {
-            this.state.fileList.length >= this.maxQuantity
-              ?
-              null
-              :
-              <div>
-                <PlusOutlined/>
-                <div style={{marginTop: 8}}>{I18n('upload')}</div>
-              </div>
-          }
-        </Upload>
+          <Upload
+            action="/xoss"
+            data={{
+              client_id: LocalStorage.get('cid'),
+              scope: 'XOSS_UPLOAD',
+            }}
+            listType="picture-card"
+            fileList={this.state.fileList}
+            onPreview={this.handlePreview}
+            beforeUpload={this.beforeUpload}
+            onChange={({fileList}) => {
+              const files = [];
+              let ing = false;
+              fileList.forEach((f, idx) => {
+                if (f.response) {
+                  if (f.response.code === 200 && f.response.data[0].result === 1) {
+                    files.push(f.response.data[0].data.xoss_key);
+                  } else {
+                    f.thumbUrl = null;
+                    f.status = 'error';
+                  }
+                }
+                if (f.status === 'uploading') {
+                  ing = true;
+                }
+              });
+              this.setState({
+                fileList: fileList,
+              });
+              if (!ing) {
+                this.props.onChange(files);
+              }
+            }}
+          >
+            {
+              this.state.fileList.length >= this.maxQuantity
+                ?
+                null
+                :
+                <div>
+                  <PlusOutlined/>
+                  <div style={{marginTop: 8}}>{I18n('upload')}</div>
+                </div>
+            }
+          </Upload>
+        </ImgCrop>
         <Modal
           visible={this.state.previewVisible}
           title={this.state.previewTitle}

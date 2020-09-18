@@ -12,7 +12,7 @@ import {Image as AutdImage} from 'antd';
  * keyName[reverse]反相 (1 or 0)
  */
 
-export default class Image extends Component {
+export default class Show extends Component {
   static propTypes = {};
 
   constructor(props) {
