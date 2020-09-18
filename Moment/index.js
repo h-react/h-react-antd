@@ -36,16 +36,16 @@ const Moment = {
     }
     return u;
   },
-  format: (timestamp = null) => {
+  format: (timestamp = null, formula = 'llll:ss') => {
     const time = new Date().getTime();
     if (!timestamp) {
       timestamp = time;
     }
     Moment.locale();
     if (timestamp.toString().length < time.toString().length) {
-      return m.unix(timestamp).format('llll:ss')
+      return m.unix(timestamp).format(formula)
     } else {
-      return m(timestamp).format('llll:ss')
+      return m(timestamp).format(formula)
     }
   },
 };

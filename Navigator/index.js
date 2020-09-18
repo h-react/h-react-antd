@@ -95,10 +95,10 @@ const Navigator = {
         vReadOnly = (vReadOnly === null) ? false : vReadOnly;
         vEnabled = (vEnabled === null) ? true : vEnabled;
         const flag1 = (ev.keyCode === 8
-          && (t === "password" || t === "text" || t === "textarea")
+          && (t === "password" || t === "text" || t === "textarea" || t === "search")
           && (vReadOnly === true || vEnabled !== true)
         );
-        const flag2 = (ev.keyCode === 8 && t !== "password" && t !== "text" && t !== "textarea");
+        const flag2 = (ev.keyCode === 8 && t !== "password" && t !== "text" && t !== "textarea" && t !== "search");
         if (flag2) {
           return false;
         }
