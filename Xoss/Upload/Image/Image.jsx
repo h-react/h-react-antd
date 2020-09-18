@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {message, Modal, Upload} from 'antd';
 import {PlusOutlined} from '@ant-design/icons';
-import {I18n, LocalStorage} from '../../../index';
+import {I18n, LocalStorage, Xoss} from '../../../index';
 
 export default class Image extends Component {
   static propTypes = {};
@@ -12,12 +12,21 @@ export default class Image extends Component {
     this.maxQuantity = this.props.maxQuantity || 1;
     this.maxSize = Number.parseInt((this.props.maxSize || 1), 10); // MB
     this.fileType = this.props.fileType || ['image/jpeg', 'image/png', 'image/gif'];
-    console.log(this.props);
+
+    let fileList = [];
+    if (this.props.value) {
+      const tmp = [];
+      this.props.value.forEach((val) => {
+        tmp.push({uid: val, name: I18n('picture'), status: 'done', url: Xoss.url(val)});
+      });
+      fileList = tmp;
+    }
+
     this.state = {
       previewVisible: false,
       previewImage: '',
       previewTitle: '',
-      fileList: this.props.value || [],
+      fileList: fileList,
     }
   }
 
