@@ -12,11 +12,12 @@ export default class Image extends Component {
     this.maxQuantity = this.props.maxQuantity || 1;
     this.maxSize = Number.parseInt((this.props.maxSize || 1), 10); // MB
     this.fileType = this.props.fileType || ['image/jpeg', 'image/png', 'image/gif'];
+    console.log(this.props);
     this.state = {
       previewVisible: false,
       previewImage: '',
       previewTitle: '',
-      fileList: []
+      fileList: this.props.value || [],
     }
   }
 
