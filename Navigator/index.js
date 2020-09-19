@@ -80,25 +80,34 @@ const Navigator = {
       vibration(shake);
     }
   },
+  banReturnPressCount: 0,
   banReturn: () => {
     if (window.history) {
       window.history.pushState(null, null, document.URL);
       window.onpopstate = function (event) {
-        window.history.pushState(null, null, History.state.currentUrl ? History.state.currentUrl : document.URL);
+        Navigator.banReturnPressCount += 1;
+        const _t = window.setTimeout(() => {
+          window.clearTimeout(_t);
+          Navigator.banReturnPressCount -= 1;
+        }, 200);
+        if (Navigator.banReturnPressCount >= 2) {
+          window.history.back();
+        } else {
+          window.history.pushState(null, null, History.state.currentUrl ? History.state.currentUrl : document.URL);
+        }
       };
       const banCode = (e) => {
-        const ev = e || window.event;//获取event对象
-        const obj = ev.target || ev.srcElement;//获取事件源
-        const t = obj.type || obj.getAttribute('type');//获取事件源类型
-        let vReadOnly = obj.getAttribute('readonly');
-        let vEnabled = obj.getAttribute('enabled');
-        vReadOnly = (vReadOnly === null) ? false : vReadOnly;
-        vEnabled = (vEnabled === null) ? true : vEnabled;
-        const flag1 = (ev.keyCode === 8
-          && (t === "password" || t === "text" || t === "textarea" || t === "search")
-          && (vReadOnly === true || vEnabled !== true)
-        );
-        const flag2 = (ev.keyCode === 8 && t !== "password" && t !== "text" && t !== "textarea" && t !== "search");
+        const ev = e || window.event;
+        const obj = ev.target || ev.srcElement;
+        const t = obj.type || obj.getAttribute('type');
+        const isBack = ev.keyCode === Number.parseInt(1e3, 2);
+        let isReadOnly = obj.getAttribute('readonly');
+        let isEnabled = obj.getAttribute('enabled');
+        isReadOnly = isReadOnly === null ? false : isReadOnly;
+        isEnabled = isEnabled === null ? true : isEnabled;
+        const iptCom = ["password", "text", "textarea", "search"];
+        const flag1 = (isBack && iptCom.includes(t) && (isReadOnly || isEnabled !== true));
+        const flag2 = (isBack && !iptCom.includes(t));
         if (flag2) {
           return false;
         }
