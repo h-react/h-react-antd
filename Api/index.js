@@ -48,9 +48,10 @@ const Index = {
    * @param error
    * @param throwable
    */
-  handle: (response, success, error = null, throwable = null) => {
+  handle: (response, success = null, error = null, throwable = null) => {
     if (response.error === 0) {
-      success();
+      if (success !== null) success();
+      else message.success(I18n('success'));
     } else if (response.error === 99999) {
       if (throwable !== null) throwable();
       else message.error(response.msg);
