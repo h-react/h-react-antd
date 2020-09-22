@@ -50,14 +50,24 @@ const Index = {
    */
   handle: (response, success = null, error = null, throwable = null) => {
     if (response.error === 0) {
-      if (success !== null) success();
-      else message.success(I18n('success'));
+      if (success !== null) {
+        success();
+      } else {
+        message.success(I18n('success'));
+      }
     } else if (response.error === 99999) {
-      if (throwable !== null) throwable();
-      else message.error(response.msg);
+      if (throwable !== null) {
+        throwable();
+      } else {
+        console.error(response.msg);
+        message.error(I18n('fail'));
+      }
     } else {
-      if (error !== null) error();
-      else message.error(I18n(response.msg));
+      if (error !== null) {
+        error();
+      } else {
+        message.warning(I18n(response.msg));
+      }
     }
   }
 
