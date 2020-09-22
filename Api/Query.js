@@ -74,11 +74,11 @@ const Socket = {
             const res = Socket.stack[stackIndex].apis[key];
             if (typeof res === 'object') {
               response.push(res);
-              if (typeof res.code === 'number' && res.code === 403) {
+              if (typeof res.error === 'number' && res.error === 44444) {
                 hasNotAuth = true;
               }
             } else {
-              response.push({code: 500, msg: 'API_ERROR', data: null});
+              response.push({error: 500, msg: 'API_ERROR', data: null});
             }
           }
         });
@@ -190,19 +190,19 @@ const Query = function (setting) {
           response.data = Crypto.decode(response.data, this.crypto);
         }
         if (typeof response.data === 'object') {
-          if (typeof response.data.code === 'number' && response.data.code === 444) {
+          if (typeof response.data.error === 'number' && response.data.error === 44444) {
             if (History.state.loggingId !== null) {
               History.setState({
                 loggingId: null,
               });
               LocalStorage.clear('h-react-logging-id');
             }
-            then({code: 500, msg: 'LIMITED_OPERATION', data: null});
+            then({error: 500, msg: 'LIMITED_OPERATION', data: null});
             return;
           }
           then(response.data);
         } else {
-          then({code: 500, msg: 'API_ERROR', data: null});
+          then({error: 500, msg: 'API_ERROR', data: null});
         }
       })
       .catch((error) => {
@@ -244,7 +244,7 @@ const Query = function (setting) {
           default:
             break;
         }
-        then({code: status, msg: error.message, data: null});
+        then({error: status, msg: error.message, data: null});
       });
   };
 

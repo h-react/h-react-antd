@@ -1,4 +1,6 @@
 import Query from "./Query";
+import {message} from "antd";
+import {I18n} from "../index";
 
 /**
  * api 请求
@@ -39,6 +41,24 @@ const Index = {
     }
     return new Query(setting);
   },
+
+  /**
+   * @param response
+   * @param success
+   * @param error
+   * @param throwable
+   */
+  handle: (response, success, error = null, throwable = null) => {
+    if (response.error === 0) {
+      success();
+    } else if (response.error === 99999) {
+      if (throwable !== null) throwable();
+      else message.error(response.msg);
+    } else {
+      if (error !== null) error();
+      else message.error(I18n(response.msg));
+    }
+  }
 
 };
 
