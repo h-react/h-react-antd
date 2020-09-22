@@ -35,22 +35,31 @@ export default () => {
       return;
     }
     setFormData({...formData, loginStatus: 'ing'});
-    Api.query().post({USER_LOGIN: values}, (res) => {
-      if (res.code === 200) {
-        message.success(I18n('LOGIN_SUCCESS'));
-        setFormData({...formData, loginStatus: 'ok'});
-        if (values.remember === true) {
-          LocalStorage.set('l_rem', values.remember ? 1 : 0);
-          LocalStorage.set('l_acc', values.account);
-        }
-        LocalStorage.set('h-react-logging-id', res.data.user_id);
-        History.setState({loggingId: res.data.user_id});
-      } else {
-        message.error(I18n(res.msg));
-        setTimeout(() => {
-          setFormData({...formData, loginStatus: 'free'});
-        }, 300);
-      }
+    Api.query().post({USER_LOGIN: values}, (response) => {
+      Api.handle(response,
+        () => {
+          message.success(I18n('LOGIN_SUCCESS'));
+          setFormData({...formData, loginStatus: 'ok'});
+          if (values.remember === true) {
+            LocalStorage.set('l_rem', values.remember ? 1 : 0);
+            LocalStorage.set('l_acc', values.account);
+          }
+          LocalStorage.set('h-react-logging-id', response.data.user_id);
+          History.setState({loggingId: response.data.user_id});
+        },
+        () => {
+          message.warning(I18n(response.msg));
+          setTimeout(() => {
+            setFormData({...formData, loginStatus: 'free'});
+          }, 300);
+        },
+        () => {
+          message.error(I18n('fail'));
+          setTimeout(() => {
+            setFormData({...formData, loginStatus: 'free'});
+          }, 300);
+        },
+      );
     });
   };
 

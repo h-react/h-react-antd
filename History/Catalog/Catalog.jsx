@@ -79,11 +79,13 @@ class Catalog extends Component {
             <Menu.Item key={val.to}>
               {val.icon !== undefined ? val.icon : ''}
               {
-                History.state.currentUrl === val.to ?
+                History.state.currentUrl === val.to
+                  ?
                   <Help title={I18n('Click again to display multiple pages.')}>
                     <span>{I18n(History.state.router[val.to].label)}</span>
                   </Help>
-                  : I18n(History.state.router[val.to].label)
+                  :
+                  <span>{I18n(History.state.router[val.to].label)}</span>
               }
             </Menu.Item>
           );

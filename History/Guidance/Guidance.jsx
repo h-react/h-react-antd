@@ -285,16 +285,16 @@ class Guidance extends Component {
                 type="primary"
                 onClick={() => {
                   message.loading(I18n('LOGGING OUT'));
-                  Api.query().post({USER_LOGOUT: {}}, (res) => {
-                    if (res.code === 200) {
-                      message.success(I18n('LOGOUT_SUCCESS'));
-                      History.setState({
-                        loggingId: null,
-                      });
-                      LocalStorage.set('h-react-logging-id', null);
-                    } else {
-                      message.error(I18n(res.msg));
-                    }
+                  Api.query().post({USER_LOGOUT: {}}, (response) => {
+                    Api.handle(response,
+                      () => {
+                        message.success(I18n('LOGOUT_SUCCESS'));
+                        History.setState({
+                          loggingId: null,
+                        });
+                        LocalStorage.set('h-react-logging-id', null);
+                      }
+                    );
                   });
                 }}
               >{I18n('logout')}</Button>

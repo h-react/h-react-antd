@@ -27,7 +27,7 @@ const Index = (trans, lang = null) => {
       if (limiter[t] !== true) {
         limiter[t] = true;
         Api.query().post({I18N_SET: {unique_key: t}}, (res) => {
-          if (res.code === 200) {
+          if (res.error === 0) {
             limiter[t] = false;
             if (res.data.i18n_unique_key === t) {
               History.state.i18n.support.forEach((l) => {
