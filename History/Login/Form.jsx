@@ -35,6 +35,7 @@ export default () => {
       return;
     }
     setFormData({...formData, loginStatus: 'ing'});
+    values.license_id = [1, 2];
     Api.query().post({USER_LOGIN: values}, (response) => {
       Api.handle(response,
         () => {
@@ -110,7 +111,6 @@ export default () => {
         <Button
           style={{width: '100%'}}
           htmlType="submit"
-          // disabled={!formData.account || !formData.password}
           type={formData.loginStatus === 'free' ? 'primary' : formData.loginStatus === 'ok' ? 'secondary' : 'normal'}
           loading={formData.loginStatus !== 'free'}
         >
