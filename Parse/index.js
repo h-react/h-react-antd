@@ -329,6 +329,12 @@ const Parse = {
     return res;
   },
 
+  /**
+   * 删除表前缀
+   * @param obj
+   * @param tableName
+   * @returns {null|*}
+   */
   removeTable: (obj, tableName) => {
     if (!obj || !tableName) {
       return obj;
