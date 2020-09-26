@@ -78,7 +78,7 @@ const Socket = {
                 hasNotAuth = true;
               }
             } else {
-              response.push({error: 99999, msg: 'API_ERROR', data: null});
+              response.push({error: res.error, msg: 'API_ERROR', data: null});
             }
           }
         });
@@ -197,7 +197,7 @@ const Query = function (setting) {
               });
               LocalStorage.clear('h-react-logging-id');
             }
-            then({error: 99999, msg: 'LIMITED_OPERATION', data: null});
+            then({error: response.data.error, msg: 'LIMITED_OPERATION', data: null});
             return;
           }
           then(response.data);
