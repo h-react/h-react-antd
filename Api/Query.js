@@ -78,7 +78,7 @@ const Socket = {
                 hasNotAuth = true;
               }
             } else {
-              response.push({error: 500, msg: 'API_ERROR', data: null});
+              response.push({error: 99999, msg: 'API_ERROR', data: null});
             }
           }
         });
@@ -197,12 +197,12 @@ const Query = function (setting) {
               });
               LocalStorage.clear('h-react-logging-id');
             }
-            then({error: 500, msg: 'LIMITED_OPERATION', data: null});
+            then({error: 99999, msg: 'LIMITED_OPERATION', data: null});
             return;
           }
           then(response.data);
         } else {
-          then({error: 500, msg: 'API_ERROR', data: null});
+          then({error: 99999, msg: 'API_ERROR', data: null});
         }
       })
       .catch((error) => {
@@ -244,7 +244,7 @@ const Query = function (setting) {
           default:
             break;
         }
-        then({error: status, msg: error.message, data: null});
+        then({error: 99999, msg: error.message, data: null});
       });
   };
 
