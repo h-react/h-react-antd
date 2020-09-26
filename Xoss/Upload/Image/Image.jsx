@@ -84,7 +84,7 @@ export default class Image extends Component {
             let ing = false;
             fileList.forEach((f, idx) => {
               if (f.response) {
-                if (f.response.code === 200 && f.response.data[0].result === 1) {
+                if (f.response.error === 0 && f.response.data[0].result === 1) {
                   files.push(f.response.data[0].data.xoss_key);
                 } else {
                   f.thumbUrl = null;
