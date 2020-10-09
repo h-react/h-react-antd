@@ -11,6 +11,12 @@ const Xoss = {
    * options[reverse]反相 (1 or 0)
    */
   url: (key, options = {}) => {
+    if (!key) {
+      return null;
+    }
+    if (key.indexOf('http') > -1 || key.indexOf('/') === 0) {
+      return key;
+    }
     const path = [
       key,
       options.thunb ? options.thunb : '',

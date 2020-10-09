@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image as AutdImage, Modal, Spin} from 'antd';
+import {Image as AutdImage, Modal} from 'antd';
 import Xoss from './../index';
 import {I18n} from "../../index";
 import "./Show.less";
