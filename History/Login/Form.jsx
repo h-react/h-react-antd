@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import {message, Form, Input, Button, Checkbox} from 'antd';
 import {UserOutlined, LockOutlined} from '@ant-design/icons';
-import {Api, History, I18n} from 'h-react-antd/index';
-import LocalStorage from "../../Storage/LocalStorage";
+import {Api, History, I18n, LocalStorage} from 'h-react-antd/index';
 
 export default () => {
 
