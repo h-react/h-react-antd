@@ -25,7 +25,7 @@ class Initial extends Component {
     }
 
     // setting
-    this.state.setting = LocalStorage.get('h-react-setting') || {};
+    this.state.setting = LocalStorage.get('h-react-setting') || this.props.defaultSetting || {};
 
     // 绑定
     History.link(this);

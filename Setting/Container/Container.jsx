@@ -1,7 +1,7 @@
 import './Container.less';
 import React, {Component} from 'react';
 import {Checkbox, Row, Col, Drawer, message} from 'antd';
-import {I18n, Auth, LocalStorage, History} from "../../index";
+import {I18n, LocalStorage, History} from "../../index";
 
 class Container extends Component {
   static propTypes = {};
