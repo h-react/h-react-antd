@@ -87,6 +87,7 @@ export default class Image extends Component {
                 if (f.response.error === 0 && f.response.data[0].result === 1) {
                   files.push(f.response.data[0].data.xoss_key);
                 } else {
+                  message.error(f.response.data[0].msg);
                   f.thumbUrl = null;
                   f.status = 'error';
                 }
