@@ -26,6 +26,7 @@ export {default as Approve} from './Approve';
 export {default as CascaderRegion} from './Cascader/Region';
 export {default as CascaderProvincial} from './Cascader/Provincial';
 export {default as CascaderMunicipal} from './Cascader/Municipal';
+export {default as SelectAddon} from './SelectAddon';
 export {default as Xoss} from './Xoss';
 export {default as XossShow} from './Xoss/Show';
 export {default as XossUploadImage} from './Xoss/Upload/Image';
