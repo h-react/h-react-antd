@@ -12,6 +12,7 @@ import {
   ClearOutlined,
   UserOutlined,
   DeleteColumnOutlined,
+  CopyOutlined,
 } from '@ant-design/icons';
 import {
   Api,
@@ -124,6 +125,15 @@ class Guidance extends Component {
             LocalStorage.set('h-react-usual-pages', this.state.usualPages);
           }}>
           <PushpinOutlined/>{I18n('Join common')}
+        </Button>
+        <Button
+          block
+          type="text"
+          onClick={() => {
+            History.push(this.state.contextMenu.url);
+          }}
+        >
+          <CopyOutlined/>{I18n(['NEW', 'TAB'])}
         </Button>
         <Button
           block danger

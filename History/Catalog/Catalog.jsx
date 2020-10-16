@@ -81,7 +81,7 @@ class Catalog extends Component {
               {
                 History.state.currentUrl === val.to
                   ?
-                  <Help title={I18n('Click again to display multiple pages.')}>
+                  <Help placement="right" title={I18n('Click again to display multiple pages.')}>
                     <span>{I18n(History.state.router[val.to].label)}</span>
                   </Help>
                   :
