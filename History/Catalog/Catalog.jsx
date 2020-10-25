@@ -107,6 +107,10 @@ class Catalog extends Component {
 
   render() {
 
+    if (History.state.catalog === false) {
+      return null;
+    }
+
     const theme = History.state.setting.enableDarkMenu ? 'dark' : 'light';
 
     return (
