@@ -220,6 +220,10 @@ class Guidance extends Component {
 
   render() {
 
+    if (History.state.guidance === false) {
+      return null;
+    }
+
     const theme = History.state.setting.enableDarkMenu ? 'dark' : 'light';
     const btnType = History.state.setting.enableDarkMenu ? 'text' : 'default';
 
