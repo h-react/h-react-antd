@@ -1,6 +1,6 @@
 import './Catalog.less';
 import React, {Component} from 'react';
-import {Menu, Popover} from 'antd';
+import {Menu} from 'antd';
 import {History, I18n} from 'h-react-antd';
 
 class Catalog extends Component {
