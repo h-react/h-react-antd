@@ -14,6 +14,12 @@ class Initial extends Component {
 
     this.location = Parse.urlDispatch();
 
+    // 是否强制登录
+    this.forceLogin = true;
+    if (typeof this.props.forceLogin === 'boolean') {
+      this.forceLogin = this.props.forceLogin;
+    }
+
     this.state = {
       preprocessingLength: this._preprocessingLength(props.preprocessing),
       preprocessingStack: 0,
@@ -22,6 +28,8 @@ class Initial extends Component {
       currentUrl: this.location.url,
       subPages: [],
       tabsActiveKey: '',
+      catalog: this.props.catalog,
+      guidance: this.props.guidance,
     }
 
     // setting
@@ -113,7 +121,7 @@ class Initial extends Component {
         </div>
       );
     }
-    if (this.state.loggingId !== null) {
+    if (this.forceLogin === false || this.state.loggingId !== null) {
       return (
         <ConfigProvider locale={History.i18nAntd()}>
           <div className="container">

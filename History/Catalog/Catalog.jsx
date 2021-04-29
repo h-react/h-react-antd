@@ -1,8 +1,7 @@
 import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
-import {History, I18n, Xoss} from 'h-react-antd';
-import Help from "../../Setting/Help";
+import {History, I18n} from 'h-react-antd';
 import {XossShow} from "../../index";
 
 class Catalog extends Component {
@@ -34,7 +33,7 @@ class Catalog extends Component {
     return res;
   }
 
-  openKeys = (catalog, keys = [], prevKeys = []) => {
+  openKeys = (catalog, keys = [], prevKeys = [], addState = true) => {
     catalog = catalog || History.state.catalog;
     catalog.forEach((val, idx) => {
       if (typeof val.to === 'string') {
@@ -49,16 +48,31 @@ class Catalog extends Component {
           }
         }
       } else if (typeof val.to === 'object') {
-        prevKeys.push(`catalog_${idx}`);
-        keys = this.openKeys(val.to[1], keys, prevKeys);
+        const prevLen = keys.length
+        keys = this.openKeys(val.to[1], keys, prevKeys, false);
+        if (keys.length > prevLen) {
+          keys.push(`catalog_${val.to[0].toString()}`);
+        }
       }
     });
-    this.state.openKeys.forEach((k) => {
-      if (!keys.includes(k)) {
-        keys.push(k);
-      }
-    });
+    if (addState) {
+      this.state.openKeys.forEach((k) => {
+        if (!keys.includes(k)) {
+          keys.push(k);
+        }
+      });
+    }
     return keys;
+  }
+
+  renderSubTabs = (to) => {
+    const tabs = [];
+    History.state.subPages.forEach((subPages) => {
+      if (subPages.url === to) {
+        tabs.push(subPages);
+      }
+    })
+    return tabs;
   }
 
   renderSub = (catalog) => {
@@ -76,18 +90,20 @@ class Catalog extends Component {
           );
         }
         if (typeof val.to === 'string') {
+          const tabs = this.renderSubTabs(val.to)
           return (
-            <Menu.Item key={val.to}>
+            <Menu.Item
+              key={val.to}
+              onClick={() => {
+                if (tabs.length <= 0) {
+                  History.push(val.to);
+                } else {
+                  History.change(tabs[tabs.length - 1].key);
+                }
+              }}
+            >
               {val.icon !== undefined ? val.icon : ''}
-              {
-                History.state.currentUrl === val.to
-                  ?
-                  <Help placement="right" title={I18n('Click again to display multiple pages.')}>
-                    <span>{I18n(History.state.router[val.to].label)}</span>
-                  </Help>
-                  :
-                  <span>{I18n(History.state.router[val.to].label)}</span>
-              }
+              <span>{I18n(History.state.router[val.to].label)}</span>
             </Menu.Item>
           );
         }
@@ -119,6 +135,10 @@ class Catalog extends Component {
 
   render() {
 
+    if (History.state.catalog === false) {
+      return null;
+    }
+
     const theme = History.state.setting.enableDarkMenu ? 'dark' : 'light';
 
     return (
@@ -130,9 +150,6 @@ class Catalog extends Component {
           mode="inline"
           theme={theme}
           inlineCollapsed={History.state.setting.enableSmallMenu}
-          onClick={(e) => {
-            History.push(e.key);
-          }}
           onOpenChange={(openKeys) => {
             this.setState({
               openKeys: openKeys
