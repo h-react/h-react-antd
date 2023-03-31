@@ -356,6 +356,29 @@ const Parse = {
       }
     }
     return res;
+  },
+
+  str2color: (str) => {
+    if (str === "") {
+      return "#ffffff";
+    }
+    const hexCharCode = [];
+    const step = 1;
+    for (let i = 0; i < step * 6; i += step) {
+      let j = i;
+      let s = NaN;
+      while (isNaN(s)) {
+        s = str.charCodeAt(j);
+        j = j - 1;
+      }
+      if (s % 16 === 0) {
+        s = 'f';
+      } else {
+        s = (15 - (15 - (s % 15))).toString(16);
+      }
+      hexCharCode.push(s);
+    }
+    return '#' + hexCharCode.join("");
   }
 
 };

@@ -24,7 +24,7 @@ import {
   LocalStorage,
   Parse,
   SettingContainer,
-  SettingHelp,
+  SettingHelp, XossShow,
 } from "../../index";
 import Help from "../../Setting/Help";
 

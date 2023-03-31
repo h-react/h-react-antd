@@ -2,6 +2,7 @@ import './Catalog.less';
 import React, {Component} from 'react';
 import {Menu} from 'antd';
 import {History, I18n} from 'h-react-antd';
+import {XossShow} from "../../index";
 
 class Catalog extends Component {
 
@@ -121,6 +122,17 @@ class Catalog extends Component {
     );
   };
 
+  renderAvatar = () => {
+    if (History.state.avatar) {
+      return (
+        <div className={`catalog-avatar ${History.state.setting.enableSmallMenu ? "sm" : ""}`}>
+          <XossShow src={History.state.avatar}/>
+        </div>
+      )
+    }
+    return null
+  }
+
   render() {
 
     if (History.state.catalog === false) {
@@ -131,6 +143,7 @@ class Catalog extends Component {
 
     return (
       <div className={`catalog ${theme}`}>
+        {this.renderAvatar()}
         <Menu
           selectedKeys={[History.state.currentUrl]}
           openKeys={this.openKeys()}
