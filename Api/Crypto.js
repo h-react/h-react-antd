@@ -43,7 +43,7 @@ const Crypto = {
       default:
         break;
     }
-    return mixed === true ? `CRYPTO|${text}` : text;
+    return mixed === true ? crypt.protocol + `${text}` : text;
   },
   decode: (result, crypt) => {
     if (crypt === undefined || crypt === null || !crypt) return result;

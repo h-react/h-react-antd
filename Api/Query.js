@@ -49,7 +49,13 @@ const Socket = {
       }
     };
     ApiSocket[host].onmessage = (msg) => {
-      const result = Crypto.is(conf.crypto) ? Crypto.decode(msg.data, conf.crypto) : Parse.jsonDecode(msg.data);
+      let result
+      if (Crypto.is(this.crypto)) {
+        const dcr = msg.data.data.crypto.replace(conf.crypto.protocol, '')
+        result = Crypto.decode(dcr, conf.crypto);
+      } else {
+        result = Parse.jsonDecode(msg.data);
+      }
       let stack = result.stack || null;
       if (stack === null) {
         console.error('STACK_ERROR');
@@ -186,9 +192,6 @@ const Query = function (setting) {
       config: {}
     })
       .then((response) => {
-        if (Crypto.is(this.crypto)) {
-          response.data = Crypto.decode(response.data, this.crypto);
-        }
         if (typeof response.data === 'object') {
           if (typeof response.data.error === 'number' && response.data.error === 44444) {
             if (History.state.loggingId !== null) {
@@ -199,6 +202,10 @@ const Query = function (setting) {
             }
             then({error: response.data.error, msg: 'LIMITED_OPERATION', data: null});
             return;
+          }
+          if (Crypto.is(this.crypto)) {
+            const dcr = response.data.data.crypto.replace(this.crypto.protocol, '')
+            response.data.data = Crypto.decode(dcr, this.crypto);
           }
           then(response.data);
         } else {
