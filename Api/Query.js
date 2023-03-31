@@ -65,7 +65,6 @@ const Socket = {
       const stackIndex = stack[0];
       const stackKey = stack[1];
       if (typeof Socket.stack[stackIndex].then !== 'function') {
-        console.error('STACK_THEN_ERROR');
         return;
       }
       Socket.stack[stackIndex].apis[stackKey] = result;
@@ -192,6 +191,9 @@ const Query = function (setting) {
       config: {}
     })
       .then((response) => {
+        if (typeof then !== 'function') {
+          return;
+        }
         if (typeof response.data === 'object') {
           if (typeof response.data.error === 'number' && response.data.error === 44444) {
             if (History.state.loggingId !== null) {
